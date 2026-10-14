@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>유튜브만 하면 매출도 오른다는 말, 진짜 그럴까요? | 플로우애즈</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap">
+<style>
+/*
+  라이트온/플로우애즈 랜딩 시안 06
+  순서: 1 히어로 → 2 핵심 주장 → 3 소개 영상(관문) → 4 선언 한 줄
+  다이얼: DESIGN_VARIANCE 7 / MOTION_INTENSITY 5 / VISUAL_DENSITY 4
+  테마: 다크 고정. 모서리 반경 단일 24px. 액센트 라임 1개.
+*/
+:root{
+  --bg:#0E0E0E; --bg2:#141414; --card:#161616; --line:#262626;
+  --fg:#FFFFFF; --mute:#9A9A9A; --lime:#A9FF00; --warn:#C9563E;
+  --r:24px;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--fg);
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;overflow-x:hidden;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+@media(min-width:768px){.wrap{padding:0 40px}}
+
+/* ── 1. 히어로 ──
+   가운데 정렬은 브랜드 지시. 문장 자체가 디자인인 선언형이라
+   중앙 정렬 회피 규칙의 예외로 둔다. */
+.hero{position:sticky;top:0;z-index:0;min-height:100dvh;
+  display:flex;align-items:center;text-align:center;pointer-events:none}
+.cover ~ section,.cover ~ footer{position:relative;z-index:1}
+/* 넘어가는 동안 히어로는 뒤로 물러나며 흐려진다. 값은 스크롤에 따라 자바스크립트가 넣는다. */
+.hero .wrap{will-change:transform,opacity;
+  opacity:var(--out-o,1);transform:scale(var(--out-s,1)) translateY(var(--out-y,0px))}
+/* 다음 화면은 히어로 위를 덮는 판이다. 배경이 비치면 두 화면이 겹쳐 보인다. */
+.cover{position:relative;z-index:1;background:var(--bg);
+  box-shadow:0 -30px 60px rgba(0,0,0,.55)}
+
+@media (prefers-reduced-motion: reduce){
+  .hero{position:static}
+  .hero .wrap{opacity:1;transform:none}
+  .cover{box-shadow:none}
+}
+.hero h1,.hero-ask{
+  letter-spacing:-.03em;line-height:1.18;font-weight:700;
+  font-size:clamp(2.5rem,10vw,6rem);
+}
+.hero h1 em{font-style:normal;display:block}
+/* 유튜브 로고는 글자 뒤에 깔린다. 왼쪽으로 살짝 꺾고,
+   글자를 읽는 데 방해되지 않을 만큼만 남긴다. */
+.yt{position:relative;display:inline-block}
+.ytmark{position:absolute;left:45%;top:16%;z-index:-1;
+  width:104%;transform:translate(-50%,-50%) rotate(-9deg);
+  opacity:.26;pointer-events:none}
+/* 로고 위에서도 글자가 또렷하게 서도록 어두운 후광을 깐다 */
+.hero h1{text-shadow:0 2px 26px rgba(0,0,0,.85), 0 0 8px rgba(0,0,0,.6)}
+.ytmark img{display:block;width:100%;height:auto}
+.hero-ask{color:var(--lime);margin-top:clamp(1.5rem,5vw,2.75rem)}
+/* 히어로 전체는 클릭을 받지 않는다. 그 안의 신청 버튼만 되살린다. */
+.hero .cta{pointer-events:auto}
+/* 점 세 개는 독립된 줄. 자간만 벌리고 줄 높이는 본문과 같게 둔다.
+   줄 높이를 줄이면 위 줄과 겹친다. */
+.dots{letter-spacing:.34em}
+.dot{display:inline-block}
+
+/* 시간 순 등장. 줄 두 개, 점 줄, 질문 */
+@keyframes rise{from{opacity:0;transform:translateY(1.25rem)}to{opacity:1;transform:translateY(0)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.seq{animation:rise .7s var(--ease) both}
+.seq-dot{animation:fade .45s var(--ease) both}
+.d1{animation-delay:.15s}
+.d2{animation-delay:.75s}
+.d3{animation-delay:1.35s}
+.d4{animation-delay:1.65s}
+.d5{animation-delay:1.95s}
+.d6{animation-delay:2.55s}
+.d7{animation-delay:2.85s}
+
+/* ── 1-1. 왜 그만두는가 ── */
+.miss{padding:104px 0 96px;text-align:center}
+@media(min-width:768px){.miss{padding:132px 0 120px}}
+.mq{font-size:clamp(1.25rem,4.2vw,1.875rem);font-weight:700;line-height:1.52;
+  letter-spacing:-.02em;color:#B0B0B0}
+.mq b{color:var(--fg);font-weight:700}
+.mquote{margin-top:20px;font-size:clamp(1.375rem,4.8vw,2.125rem);font-weight:700;
+  line-height:1.42;letter-spacing:-.025em;color:#B0B0B0}
+.mquote b{color:var(--fg)}
+/* 히어로에 쓴 점 세 개를 여기서 한 번 더. 말끝이 흐려지는 자리다 */
+.mdots{margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:9px}
+.mdots i{width:5px;height:5px;border-radius:50%;background:#4A4A4A}
+.mcap{margin-top:44px;font-size:.875rem;font-weight:700;color:var(--mute);letter-spacing:-.01em}
+.qrow{margin-top:18px}
+/* 채널 화면은 가로로 긴 그림이라 후기 카드와 비율을 달리 잡는다 */
+.qrow .tile{aspect-ratio:16/10;width:264px}
+@media(min-width:768px){.qrow .tile{width:320px}}
+.mtail{margin-top:30px;font-size:clamp(1.25rem,4.4vw,1.875rem);font-weight:700;
+  line-height:1.52;letter-spacing:-.025em}
+.mtail b{color:var(--warn)}
+
+/* ── 2. 핵심 주장 ── */
+.claim{padding:112px 0 112px;text-align:center}
+@media(min-width:768px){.claim{padding:132px 0 152px}}
+.claim p{font-size:clamp(1.25rem,4.2vw,1.875rem);font-weight:700;line-height:1.52;letter-spacing:-.02em}
+.claim p+p{margin-top:2.25em}
+.claim .lime{color:var(--fg)}
+.claim .handoff{color:var(--mute);font-weight:500}
+/* 두 갈래 카드 */
+/* 좁은 화면에서도 좌우로 나란히 둔다. 나란히 놓여야 대비가 읽힌다 */
+.vs{margin-top:2.25em;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(min-width:768px){.vs{gap:16px}}
+.vscard{display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+  gap:16px;min-height:158px;
+  padding:22px 12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+@media(min-width:768px){.vscard{min-height:200px;padding:30px 24px;gap:22px}}
+/* 왼쪽은 가라앉히고 오른쪽은 띄운다. 테두리 색만으로는 차이가 안 읽힌다. */
+.vscard.bad{background:#101010;border-color:rgba(201,86,62,.45)}
+.vscard.bad p{color:#8E8E8E}
+.vscard.good{background:#14170D;border:2px solid var(--lime);
+  box-shadow:0 0 0 1px rgba(169,255,0,.12),0 14px 44px rgba(169,255,0,.10)}
+.vscard p{font-size:clamp(.875rem,3.4vw,1.25rem);line-height:1.55;letter-spacing:-.02em}
+.vscard.good p b{color:var(--lime)}
+.vscard.bad p b{color:var(--warn)}
+
+/* 카드 안 개념도. 눈금도 숫자도 없다. 형태만 말한다.
+   흐린 점선이 조회수, 굵은 선이 매출. */
+.spark{display:block;width:100%;max-width:260px;height:auto;margin:0 auto}
+.spark .base{stroke:#2A2A2A;stroke-width:1}
+.spark .views{fill:none;stroke:#4E4E4E;stroke-width:2;stroke-linecap:round;
+  stroke-dasharray:1 6}
+.spark .sales{fill:none;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.bad .spark .sales{stroke:var(--warn)}
+.good .spark .sales{stroke:var(--lime);filter:drop-shadow(0 0 6px rgba(169,255,0,.45))}
+.spark .tip{fill:var(--lime);transform-box:fill-box;transform-origin:center;opacity:0}
+
+/* 선이 그려지는 순서로 대비를 만든다. 왼쪽이 먼저, 오른쪽이 나중. */
+/* animation이 아니라 transition으로 그린다. 애니메이션은 화면에 안 보이는 탭에서
+   시간이 멈춰 선이 숨은 채로 굳는다. transition은 시간이 안 흘러도 최종값이 적용돼
+   최악의 경우에도 선은 그려진 상태로 남는다. */
+.js .spark .draw{stroke-dashoffset:130;
+  transition:stroke-dashoffset .95s var(--ease);transition-delay:var(--d,0s)}
+.js .spark .views{stroke-dashoffset:0}
+.js .spark .tip{transition:opacity .35s var(--ease),transform .35s var(--ease);
+  transition-delay:1.9s;transform:scale(.2)}
+.js .vs.go .spark .draw{stroke-dashoffset:0}
+.js .vs.go .spark .tip{opacity:1;transform:scale(1)}
+/* 시간이 멈춘 뷰어에서는 전환이 시작점에 굳는다. 자바스크립트가 뒤늦게
+   .drawn을 달면 전환을 끊고 완성 상태로 바로 넘긴다. */
+.js .vs.drawn .spark .draw{transition:none;stroke-dashoffset:0}
+.js .vs.drawn .spark .tip{transition:none;opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  .js .spark .draw{stroke-dashoffset:0}
+  .js .spark .tip{opacity:1;transform:none}
+}
+.vs+.handoff{margin-top:2.25em}
+.claim .handoff b{color:var(--fg);font-weight:700}
+
+/* ── 3. 소개 영상 ── */
+.video{background:var(--bg2);padding:72px 0 88px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+@media(min-width:768px){.video{padding:112px 0 128px}}
+.vslot{aspect-ratio:16/9;border:1px dashed #3A3A3A;border-radius:var(--r);background:var(--card);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px}
+.vslot strong{font-size:clamp(.9375rem,3.6vw,1.0625rem);font-weight:700;color:#CFCFCF}
+.vslot span{font-size:.8125rem;color:var(--mute);line-height:1.6}
+.vcap{margin-top:16px;font-size:.8125rem;color:var(--mute);line-height:1.6;text-align:center}
+
+/* 소개 영상 — 자체 호스팅 mp4. 자동재생 없이 포스터 + 재생 버튼으로 연다 */
+.vframe{position:relative;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;background:#0E0E0E}
+.vframe video{display:block;width:100%;height:100%;object-fit:cover}
+.vplay{position:absolute;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  padding:0;border:0;background:transparent;cursor:pointer;
+  transition:transform .5s var(--ease),opacity .5s var(--ease)}
+.vplay i{display:flex;align-items:center;justify-content:center;width:76px;height:76px;border-radius:50%;
+  background:var(--lime)}
+.vplay i svg{margin-left:4px}
+.vplay:hover{transform:scale(1.02)}
+.vplay:active{transform:scale(.98)}
+.vframe.playing .vplay{opacity:0;pointer-events:none}
+
+/* ── 3. 소개 영상 머리말 ── */
+h2{font-size:clamp(1.75rem,5.4vw,3rem);font-weight:700;letter-spacing:-.025em;line-height:1.34}
+/* 섹션 제목의 강조는 흰색이다. 라임은 히어로 질문·선언·"무료"·버튼에만 쓴다 */
+h2 b{color:var(--fg);font-weight:700}
+.vhead{text-align:center}
+.vslot{margin-top:32px}
+@media(min-width:768px){.vslot{margin-top:44px}}
+.vframe{margin-top:32px}
+@media(min-width:768px){.vframe{margin-top:44px}}
+
+/* ── 4. 선언 한 줄 ──
+   영상이 끝나고 결론을 못 박는 자리. 이 문장만 남은 화면이 맞다. */
+.creed{padding:120px 0 132px;text-align:center}
+@media(min-width:768px){.creed{padding:180px 0 200px}}
+.creed p{font-size:clamp(1.75rem,7vw,4rem);font-weight:700;letter-spacing:-.03em;line-height:1.3}
+.creed p b{color:var(--lime);font-weight:700;font-size:1.26em;letter-spacing:-.035em}
+.creed .l2{display:block;margin-top:.32em}
+img{display:block;max-width:100%}
+
+
+/* ══ 5. 카톡 후기 ══ */
+.reviews{padding:88px 0 104px;overflow:hidden}
+@media(min-width:768px){.reviews{padding:132px 0 148px}}
+.reviews .note{margin-top:18px;font-size:clamp(.9375rem,3.6vw,1.0625rem);color:var(--mute);line-height:1.78}
+.reviews .note b{color:var(--fg);font-weight:700}
+
+/* 슬라이드 뷰포트는 화면 전체 폭을 쓴다. 좌우 끝에서 잘려 나가야
+   "더 있다"가 보인다. 컨테이너 안에 가두면 카드가 줄지어 끝난 것처럼 읽힌다. */
+.rows{margin-top:40px;display:grid;gap:16px}
+@media(min-width:768px){.rows{margin-top:56px;gap:20px}}
+.mwrap{position:relative}
+.marquee{overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.marquee::-webkit-scrollbar{display:none}
+.track{display:flex;align-items:flex-start;gap:16px;width:max-content;padding:0 20px;
+  animation:slide 78s linear infinite}
+@media(min-width:768px){.track{gap:20px;padding:0 40px}}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* 첫째 줄은 왼쪽으로, 둘째 줄은 오른쪽으로. 속도를 조금 달리해야
+   두 줄이 한 덩어리처럼 붙어 움직이지 않는다. */
+.track.rev{animation-direction:reverse;animation-duration:96s}
+.mwrap:hover .track{animation-play-state:paused}
+
+.tile{flex:0 0 auto;width:240px;border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;background:#111;cursor:zoom-in;
+  transition:border-color .5s var(--ease),transform .5s var(--ease)}
+@media(min-width:768px){.tile{width:288px}}
+.tile:hover{border-color:#3A3A3A;transform:translateY(-4px)}
+.tile img{width:100%;height:100%;object-fit:cover;object-position:top}
+/* 후기 줄은 그림 아래에 핵심 문장을 함께 둔다. 흐르는 띠에서 그림 속 글자는 안 읽힌다. */
+.rows .tile{aspect-ratio:auto;border:0;background:transparent;overflow:visible}
+.rows .shot{display:block;aspect-ratio:4/5;overflow:hidden;background:#111;
+  border:1px solid var(--line);border-radius:var(--r);
+  transition:border-color .5s var(--ease)}
+.rows .tile:hover .shot{border-color:#3A3A3A}
+.rows .shot img{display:block}
+.rows figcaption{margin-top:11px;font-size:.8125rem;line-height:1.55;letter-spacing:-.01em;
+  color:#B9B9B9;white-space:normal;min-height:3.1em}
+@media(min-width:768px){.rows figcaption{font-size:.875rem;margin-top:13px}}
+
+/* 이미지가 들어오기 전 빈 자리. 넣을 그림의 비율을 그대로 잡아둔다. */
+.tile{aspect-ratio:4/5}
+.slot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  height:100%;border:1px dashed #3A3A3A;border-radius:var(--r);background:var(--card);
+  cursor:default}
+.tile:has(.slot){border-color:transparent;background:transparent}
+.slot b{font-size:1.5rem;font-weight:700;color:#3A3A3A;letter-spacing:-.02em}
+.slot span{font-size:.75rem;color:#5A5A5A}
+
+/* 좌우 끝을 배경색으로 덮어 카드가 화면 밖으로 녹아들게 한다 */
+.fade{position:absolute;top:0;bottom:0;width:48px;pointer-events:none;z-index:2}
+.fade.l{left:0;background:linear-gradient(90deg,var(--bg),rgba(14,14,14,0))}
+.fade.r{right:0;background:linear-gradient(270deg,var(--bg),rgba(14,14,14,0))}
+@media(min-width:768px){.fade{width:96px}}
+
+/* ══ 6. 도식 ══ */
+.how{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:88px 0 104px}
+@media(min-width:768px){.how{padding:132px 0 148px}}
+.how>.wrap>h2,.how .lead{text-align:center}
+.how .lead{margin-top:16px;font-size:clamp(.9375rem,3.6vw,1.0625rem);color:var(--mute);line-height:1.75}
+
+/* 스크롤을 내리면서 단계가 하나씩 켜진다.
+   왼쪽 세로선이 지나온 만큼 라임으로 채워지는 게 진행 표시다. */
+.flow{position:relative;margin-top:44px;max-width:720px}
+@media(min-width:768px){.flow{margin-top:64px}}
+.fstep{position:relative;padding-left:32px;padding-bottom:20px}
+@media(min-width:768px){.fstep{padding-left:44px;padding-bottom:24px}}
+.fstep:last-child{padding-bottom:0}
+/* 점. 선의 머리가 지나가는 순간 켜진다. */
+.fstep::before{content:"";position:absolute;left:3px;top:22px;width:13px;height:13px;
+  border-radius:50%;background:var(--bg2);border:1px solid #3A3A3A;z-index:2;
+  transition:background .3s var(--ease),border-color .3s var(--ease),
+             transform .3s var(--ease),box-shadow .3s var(--ease)}
+.fstep.lit::before{background:var(--lime);border-color:var(--lime);transform:scale(1.25);
+  box-shadow:0 0 10px rgba(169,255,0,.55)}
+/* 시간이 멈춘 뷰어에서는 전환이 시작점에 굳는다. 그럴 때는 전환을 끊고 결과만 남긴다. */
+.flow.instant .fstep::before{transition:none}
+/* 마지막 점은 도착점이라 한 번 더 크게 맺는다 */
+.fstep:last-child.lit::before{transform:scale(1.65);box-shadow:0 0 16px rgba(169,255,0,.7)}
+
+/* 세로선 한 줄. 회색 바탕 위로 라임이 스크롤만큼 차오르고, 끝에서 빛난다.
+   시작 위치(--y0)와 길이(--len)는 자바스크립트가 첫 점과 마지막 점을 재서 넣는다. */
+.flow::before,.flow::after{content:"";position:absolute;left:9px;top:var(--y0,22px);width:1px}
+.flow::before{height:var(--len,0px);background:var(--line)}
+.flow::after{left:8px;width:3px;border-radius:0 0 2px 2px;background:var(--lime);
+  height:calc(var(--len,0px) * var(--p,0));
+  box-shadow:0 0 12px rgba(169,255,0,.7),0 0 3px rgba(169,255,0,.9)}
+
+.fbox{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:18px 20px 20px}
+.js .fstep[data-reveal]{transform:translateY(2.75rem)}
+.js .fstep[data-reveal].in{transform:translateY(0)}
+@media(min-width:768px){.fbox{padding:22px 26px 24px}}
+.fno{display:block;font-size:.75rem;font-weight:700;letter-spacing:.14em;color:var(--mute)}
+.fbox ul{margin-top:10px;list-style:none}
+.fbox li{font-size:clamp(1rem,3.9vw,1.1875rem);font-weight:700;letter-spacing:-.02em;
+  line-height:1.55;padding:3px 0}
+.fbox li span{display:block;margin-top:4px;font-size:.8125rem;font-weight:500;color:var(--mute);
+  letter-spacing:0;line-height:1.6}
+/* 마지막 단계는 도착점이라 테두리만 세운다 */
+.fstep.done .fbox{border-color:var(--lime)}
+
+/* ══ 6-1. 우리 채널 숫자 ══ */
+.live{padding:88px 0 8px}
+@media(min-width:768px){.live{padding:132px 0 12px}}
+.lcard{margin-top:36px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:26px 22px}
+@media(min-width:768px){.lcard{margin-top:48px;padding:36px 40px}}
+.ltop{display:flex;justify-content:flex-end}
+.ltag{font-size:.75rem;color:var(--mute);letter-spacing:0}
+.lnums{margin-top:14px;display:grid;gap:22px}
+@media(min-width:768px){.lnums{grid-template-columns:repeat(3,1fr);gap:0}}
+.lnum{text-align:center;padding:14px 0}
+@media(min-width:768px){.lnum+.lnum{border-left:1px solid var(--line)}}
+.lnum dt{font-size:.875rem;color:var(--mute)}
+.lnum dd{margin-top:10px;font-size:clamp(2.25rem,9vw,3.25rem);font-weight:700;
+  letter-spacing:-.035em;line-height:1;color:var(--lime);font-variant-numeric:tabular-nums}
+.lnum dd i{font-style:normal;font-size:.4em;font-weight:700;color:var(--fg);margin-left:4px}
+.lfoot{margin-top:20px;padding-top:22px;border-top:1px solid var(--line);text-align:center}
+.lbtn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
+  margin-top:16px;padding:14px 24px;min-height:48px;
+  border:1px solid var(--line);border-radius:var(--r);background:transparent;color:var(--fg);
+  font-family:inherit;font-size:.9375rem;font-weight:700;letter-spacing:-.01em;cursor:pointer;
+  transition:border-color .5s var(--ease),transform .5s var(--ease)}
+.lbtn:hover{border-color:var(--lime);transform:scale(1.02)}
+
+/* ══ 7. 대표 소개 ══ */
+/* 모바일이 기준이다. 사진을 원으로 세우고 아래로만 쌓는다. */
+.founder{padding:88px 0 104px}
+@media(min-width:768px){.founder{padding:132px 0 148px}}
+.founder .wrap{max-width:600px}
+.fgrid{display:block;text-align:left}
+.photo{width:168px;height:168px;margin:0 auto;border:1px solid var(--line);
+  border-radius:50%;overflow:hidden;background:var(--card)}
+@media(min-width:768px){.photo{width:200px;height:200px}}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:center 18%;
+  transform:scale(1.28);filter:grayscale(1) contrast(1.06)}
+
+.founder h2{margin-top:30px;font-size:clamp(1.625rem,6.4vw,2.5rem);line-height:1.38}
+/* 라임 줄은 윗줄과 폭이 맞게 한 단계 키운다 */
+.founder h2 b{color:var(--fg);font-size:1.2em;line-height:1.3}
+/* 이름 아래 약력. 문단이 아니라 이력이므로 줄마다 끊어 읽게 둔다 */
+.bio{margin-top:22px;padding-top:20px;border-top:1px solid var(--line);
+  list-style:none;display:grid;gap:7px}
+.bio li{font-size:.9375rem;line-height:1.5;color:#B9B9B9;padding-left:13px;position:relative}
+.bio li::before{content:"";position:absolute;left:0;top:.6em;width:4px;height:4px;
+  border-radius:50%;background:#4A4A4A}
+.bio li b{color:var(--fg);font-weight:700}
+
+.fbody p{margin-top:26px;font-size:clamp(1rem,3.9vw,1.1875rem);line-height:1.58;
+  letter-spacing:-.01em;color:#CFCFCF}
+.fbody p:first-of-type{margin-top:28px}
+.fbody b{color:var(--fg);font-weight:700}
+/* 마지막 질문 두 개는 한 단계 크게. 답은 아래 버튼이 받는다. */
+.fbody .fask{margin-top:32px;font-size:clamp(1.125rem,4.5vw,1.375rem);line-height:1.5;color:var(--fg)}
+.fask.pos b{color:var(--lime)}
+.fask.neg b{color:var(--warn)}
+.fbody em{font-style:normal;color:var(--fg);font-weight:700}
+.fbody .proofline{margin-top:20px;padding-top:18px;border-top:1px solid var(--line);
+  font-size:clamp(1.0625rem,4.2vw,1.3125rem);font-weight:700;line-height:1.55;
+  letter-spacing:-.02em;color:#D6D6D6}
+.fbody .proofline b{color:var(--lime);font-size:1.2em;letter-spacing:-.035em}
+/* 인사. 자격을 말하기 전에 사람이 먼저 나온다. */
+.hello{margin-bottom:20px;font-size:clamp(1rem,3.9vw,1.1875rem);line-height:1.72;color:#C9C9C9}
+/* 이름만 손글씨. 문장까지 손글씨로 가면 읽기 힘들고 톤이 무너진다. */
+.sign{font-family:'Nanum Pen Script','Pretendard',sans-serif;font-size:1.95em;line-height:1;
+  color:var(--fg);letter-spacing:.01em;vertical-align:-.08em}
+
+/* ══ 확대 보기 ══ */
+.lb{position:fixed;inset:0;z-index:60;background:rgba(8,8,8,.94);
+  display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.lb.on{display:flex}
+.lb img{max-width:min(100%,880px);max-height:90vh;width:auto;height:auto;
+  border:1px solid var(--line);border-radius:var(--r)}
+
+/* ══ 9. 마무리 ══ */
+.close{padding:8px 0 112px}
+.close.last{padding:0 0 96px}
+@media(min-width:768px){.close{padding-bottom:160px}}
+.close .wrap{max-width:760px}
+
+/* ══ 8. 오퍼 ══ */
+.offer{padding:80px 0 88px} @media(min-width:768px){.offer{padding:132px 0 112px}} .offer .wrap{max-width:760px}
+.offer h2{font-size:clamp(1.75rem,5.6vw,2.75rem);letter-spacing:-.028em}
+.offer .bridge{margin-top:18px;font-size:clamp(.9375rem,3.6vw,1.0625rem);color:var(--mute);line-height:1.78}
+/* ── 오퍼 머리 (받는 것을 먼저 말하고 바로 버튼) ── */
+.opening{position:relative;text-align:center;padding-bottom:8px}
+.opening::before{content:"";position:absolute;left:50%;top:-180px;
+  width:min(760px,150%);height:440px;transform:translateX(-50%);
+  background:radial-gradient(58% 58% at 50% 50%,rgba(169,255,0,.13),transparent 70%);
+  pointer-events:none}
+.opening>*{position:relative}
+.offer .dots{display:flex;flex-direction:column;align-items:center;gap:9px;margin-bottom:34px}
+.offer .dots i{width:7px;height:7px;border-radius:50%;background:var(--lime)}
+.offer .dots i:nth-child(1){opacity:.16}
+.offer .dots i:nth-child(2){opacity:.32}
+.offer .dots i:nth-child(3){opacity:.54}
+.offer .dots i:nth-child(4){opacity:.86}
+.offer .dots.link{margin:34px 0 30px}
+.opening h2{font-size:clamp(1.875rem,6.2vw,3rem);line-height:1.42}
+.opening .bridge{margin-top:16px}
+.cards-lead{margin-top:64px;font-size:.8125rem;color:var(--mute)}
+
+/* ── 카드 ── */
+/* 번호를 왼쪽에 세우고 제목을 키운다. 셋이 나란히 눈에 들어와야 한다. */
+.cards{margin-top:40px;display:grid;gap:0;border-top:1px solid var(--line)}
+@media(min-width:768px){.cards{margin-top:52px}}
+.card{position:relative;
+  padding:26px 0 28px 22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+@media(min-width:768px){.card{padding:34px 0 36px 28px;gap:26px}}
+.card + .card{border-top:1px solid var(--line)}
+
+/* 박스 공통 입체감. 위 모서리에 빛이 걸리고 아래로 그림자가 깔린다.
+   다크 배경이라 값이 조금만 커도 떠 보이니 약하게 잡는다.
+   각 박스가 background 를 따로 선언하므로 반드시 그 뒤에 온다. */
+.vscard,.fbox,.lcard{
+  background:linear-gradient(180deg,#1A1A1A 0%,#131313 100%);
+  box-shadow:0 12px 28px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.055)}
+.tile{box-shadow:0 12px 28px rgba(0,0,0,.5)}
+.tile:has(.slot){box-shadow:none}
+/* 왼쪽 라임 바는 항목이 뜰 때 위에서 아래로 그어진다 */
+.card::before{content:"";position:absolute;left:0;top:26px;bottom:28px;width:3px;background:var(--lime)}
+@media(min-width:768px){.card::before{top:34px;bottom:36px}}
+.js .card::before{transform:scaleY(0);transform-origin:top;
+  transition:transform .8s var(--ease);transition-delay:calc(var(--i,0) * 140ms + 120ms)}
+.js .card.in::before{transform:scaleY(1)}
+.nofx .card::before{transition:none;transform:scaleY(1)}
+/* 번호가 주인공이다. 눈이 번호를 타고 내려가며 셋을 순서로 읽는다. */
+.cnum{font-size:clamp(1.75rem,7.2vw,2.625rem);font-weight:700;color:#4A4A4A;
+  letter-spacing:-.03em;line-height:1;padding-top:.04em;font-variant-numeric:tabular-nums;
+  transition:color .45s var(--ease),text-shadow .45s var(--ease)}
+/* 항목이 화면 가운데쯤 올라오면 켜진다. 그냥 지나치지 않게 붙잡는 장치다. */
+.card.hot .cnum{color:var(--lime);text-shadow:0 0 18px rgba(169,255,0,.45)}
+.nofx .cnum{transition:none;color:var(--lime)}
+.card h3{font-size:clamp(1.375rem,5.4vw,1.875rem);font-weight:700;letter-spacing:-.024em;line-height:1.34}
+.does{margin-top:10px;font-size:clamp(.875rem,3.5vw,1rem);line-height:1.78;letter-spacing:-.01em;color:#8E8E8E}
+
+/* ── 흐려지는 항목 + 합계 ── */
+
+.total{text-align:center}
+.total em{display:block;font-style:normal;font-size:clamp(1.1875rem,4.8vw,1.625rem);font-weight:700;letter-spacing:-.02em;line-height:1.72;color:#D6D6D6}
+.total em .cost{color:var(--warn)}
+/* 금액을 읽고 난 뒤에 무료가 켜진다. 순서가 곧 설명이다. */
+.total strong b{transition:color .45s var(--ease) .25s,text-shadow .45s var(--ease) .25s}
+.js .total strong b{color:#4A4A4A}
+.js .total.hit strong b{color:var(--lime);text-shadow:0 0 22px rgba(169,255,0,.45)}
+.nofx .total strong b{transition:none;color:var(--lime)}
+.total strong{display:block;margin-top:42px;font-size:clamp(1.5rem,5.6vw,2.25rem);font-weight:700;letter-spacing:-.025em;line-height:1.62}
+.total strong b{color:var(--lime);font-size:1.32em;letter-spacing:-.035em}
+.total small{display:block;margin-top:9px;font-size:.75rem;color:#767676}
+.guard{margin-top:20px;font-size:.8125rem;color:var(--mute);line-height:1.75;text-align:center}
+
+/* ── 희소성 ── */
+.scarce{margin-top:40px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);
+  padding:22px;text-align:center}
+.scarce small{display:block;font-size:.8125rem;color:var(--mute);margin-bottom:8px}
+.scarce strong{font-size:clamp(1.0625rem,4.2vw,1.25rem);font-weight:700;letter-spacing:-.02em}
+.scarce strong b{color:var(--lime)}
+
+.nextstep{margin-top:30px;font-size:clamp(.9375rem,3.7vw,1.0625rem);line-height:1.82;color:#D6D6D6;text-align:center}
+
+/* ── CTA ── */
+.cta{margin-top:30px;display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;text-decoration:none;
+  background:var(--lime);color:#0E0E0E;border:0;border-radius:var(--r);
+  font-family:inherit;font-size:clamp(1rem,4vw,1.125rem);font-weight:700;letter-spacing:-.01em;
+  white-space:nowrap;cursor:pointer;transition:transform .5s var(--ease)}
+@media(min-width:768px){.cta{max-width:420px;margin-left:auto;margin-right:auto}}
+.cta-top{display:inline-flex;width:auto;min-width:0;padding:0 34px;margin:36px 0 0}
+.cta:hover{transform:scale(1.02)}
+.cta:active{transform:scale(.98)}
+
+
+/* ══ 10. 자주 묻는 질문 ══ */
+.faq{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:88px 0 96px}
+@media(min-width:768px){.faq{padding:132px 0 140px}}
+.faq .wrap{max-width:760px}
+.faq h2{text-align:center}
+.qlist{margin-top:40px;border-top:1px solid var(--line)}
+@media(min-width:768px){.qlist{margin-top:52px}}
+.q{border-bottom:1px solid var(--line)}
+.q summary{list-style:none;cursor:pointer;padding:22px 40px 22px 0;position:relative;
+  font-size:clamp(1rem,3.9vw,1.1875rem);font-weight:700;letter-spacing:-.015em;line-height:1.6}
+.q summary::-webkit-details-marker{display:none}
+.q summary::after{content:"";position:absolute;right:6px;top:50%;width:11px;height:11px;
+  border-right:2px solid var(--mute);border-bottom:2px solid var(--mute);
+  transform:translateY(-70%) rotate(45deg);transition:transform .4s var(--ease)}
+.q[open] summary::after{transform:translateY(-30%) rotate(225deg)}
+.q p{padding:0 0 24px;font-size:clamp(.9375rem,3.7vw,1.0625rem);line-height:1.82;color:#B9B9B9}
+.q p b{color:var(--fg);font-weight:700}
+
+/* ══ 11. 신청 폼 — 모달 ══
+   폼은 본문에서 빼 모달로 올렸다. CTA를 누를 때만 뜨게 한다.
+   모바일에서 키보드가 올라오면 화면이 좁아지므로
+   가운데 정렬 대신 모달 자체가 위에서부터 쌓이며 스크롤된다. */
+.modal{position:fixed;inset:0;z-index:70;display:none;background:rgba(8,8,8,.94);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:24px 20px calc(28px + env(safe-area-inset-bottom))}
+/* :target은 자바스크립트가 안 도는 환경의 폴백이다 */
+.modal.on,.modal:target{display:block}
+.modal-panel{position:relative;max-width:560px;margin:0 auto;
+  background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);
+  padding:46px 20px 36px}
+@media(min-width:768px){.modal{padding:48px 24px}.modal-panel{padding:54px 40px 44px}}
+/* 닫기 버튼은 화면에 고정한다. 폼이 길어서 아래로 내리면
+   패널에 붙여둔 버튼은 위로 사라져 닫을 길이 없어진다. */
+.modal-x{position:fixed;top:12px;right:12px;z-index:1;width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(20,20,20,.92);border:1px solid var(--line);border-radius:50%;
+  color:var(--mute);font-family:inherit;font-size:1.375rem;line-height:1;
+  cursor:pointer;transition:color .4s var(--ease)}
+.modal-x:hover{color:var(--fg)}
+.noscroll{overflow:hidden}
+.modal .apply{padding:0}
+
+/* 열리는 동작. 배경이 먼저 어두워지고 패널이 살짝 떠오른다.
+   눈에 띄면 실패다 — 값을 더 키우지 않는다. */
+.modal.on{animation:m-bg .22s ease both}
+.modal.on .modal-panel{animation:m-panel .34s var(--ease) both}
+.modal.out{animation:m-bg .16s ease reverse both}
+.modal.out .modal-panel{animation:m-panel .16s ease reverse both}
+@keyframes m-bg{from{opacity:0}to{opacity:1}}
+@keyframes m-panel{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+
+/* 모바일은 화면을 채우는 시트. 아래에서 올라온다. */
+@media(max-width:767px){
+  .modal{padding:0}
+  .modal-panel{min-height:100dvh;border:0;border-radius:0;
+    padding:64px 20px calc(40px + env(safe-area-inset-bottom))}
+  .modal.on .modal-panel{animation:m-sheet .36s var(--ease) both}
+  .modal.out .modal-panel{animation:m-sheet .18s ease reverse both}
+  @keyframes m-sheet{from{transform:translateY(100%)}to{transform:none}}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .modal.on,.modal.on .modal-panel,.modal.out,.modal.out .modal-panel{animation:none}
+}
+
+/* ── 단계 표시 ── */
+.pbar{display:flex;gap:6px}
+.pbar i{flex:1;height:3px;border-radius:2px;background:var(--line);
+  transition:background .5s var(--ease)}
+.pbar i.on{background:var(--lime)}
+.pnum{margin-top:12px;text-align:center;font-size:.8125rem;color:var(--mute)}
+.modal .apply h2{margin-top:14px}
+.shead{margin-bottom:10px}
+.shead .lead{margin-top:14px}
+
+/* ── 단계 ── */
+.dhead{text-align:center;padding:4px 0 2px}
+.dhead .deb{font-size:.75rem;letter-spacing:.14em;font-weight:800;color:var(--lime)}
+.dhead h3{font-size:1.25rem;font-weight:800;margin:.4rem 0 .5rem;color:#fff}
+.dhead p{font-size:.875rem;line-height:1.7;color:#B9B9B9;margin:0}
+.qintro{border-left:3px solid var(--lime);padding:12px 14px;background:rgba(169,255,0,.06);border-radius:0 8px 8px 0}
+.qintro b{display:block;color:#fff;margin-bottom:6px;font-size:.9375rem}
+.qintro p{margin:0;font-size:.8125rem;line-height:1.7;color:#C4C4C4}
+.step{display:none}
+.step.on{display:grid;gap:18px;animation:m-step .34s var(--ease) both}
+@keyframes m-step{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.step.on{animation:none}}
+/* 단계마다 높이가 달라 패널이 출렁이는 걸 막는다 */
+.form{min-height:430px}
+
+/* ── 고르는 항목 ── */
+fieldset.field{border:0;padding:0;margin:0}
+.field legend{padding:0;font-size:.875rem;color:var(--mute)}
+.field small{font-size:.8125rem;color:#6A6A6A}
+.opts{margin-top:9px;display:grid;gap:8px}
+@media(min-width:480px){.opts{grid-template-columns:1fr 1fr}}
+/* 설명이 붙은 항목은 한 줄에 하나씩 */
+.opts.stack{grid-template-columns:1fr !important}
+.opt span{display:grid;gap:3px}
+.opt b{font-weight:700}
+.opt small{font-size:.8125rem;color:var(--mute);line-height:1.45}
+.etc-in{margin-top:8px}
+.opt{display:flex;align-items:center;gap:10px;padding:14px 16px;min-height:52px;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  font-size:.9375rem;line-height:1.4;cursor:pointer;
+  transition:border-color .4s var(--ease)}
+/* 아래 .field input 규칙이 라디오까지 잡아 늘려버린다. 그보다 좁게 다시 건다. */
+.opt input[type="radio"]{width:17px;height:17px;flex:0 0 auto;padding:0;
+  background:none;border:0;border-radius:50%;accent-color:var(--lime)}
+.opt:hover{border-color:#3A3A3A}
+.opt:has(input:checked){border-color:var(--lime)}
+
+/* ── 단계 이동 버튼 ── */
+.nav{display:flex;gap:10px;margin-top:6px}
+.nav .cta{margin:0;flex:1}
+@media(min-width:768px){.nav .cta{max-width:none}}
+.btn-back{flex:0 0 auto;min-height:56px;padding:0 26px;
+  background:none;border:1px solid var(--line);border-radius:var(--r);
+  color:var(--fg);font-family:inherit;font-size:1rem;font-weight:700;
+  cursor:pointer;transition:border-color .4s var(--ease)}
+.btn-back:hover{border-color:#3A3A3A}
+.apply h2{text-align:center}
+.apply .lead{margin-top:16px;text-align:center;font-size:clamp(.9375rem,3.6vw,1.0625rem);
+  color:var(--mute);line-height:1.78}
+.form{margin-top:40px;display:grid;gap:18px}
+@media(min-width:768px){.form{margin-top:52px}}
+.field{display:grid;gap:9px}
+.field label{font-size:.875rem;color:var(--mute)}
+.field label i{font-style:normal;color:var(--lime)}
+.field input,.field textarea{
+  width:100%;padding:15px 16px;background:var(--card);color:var(--fg);
+  border:1px solid var(--line);border-radius:14px;
+  font-family:inherit;font-size:1rem;line-height:1.5;
+  transition:border-color .4s var(--ease)}
+.field textarea{min-height:104px;resize:vertical}
+.field input::placeholder,.field textarea::placeholder{color:#6A6A6A}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--lime)}
+.agree{display:flex;align-items:flex-start;gap:10px;margin-top:4px;
+  font-size:.875rem;color:var(--mute);line-height:1.66}
+.agree input{width:18px;height:18px;flex:0 0 auto;margin-top:2px;accent-color:var(--lime)}
+.apply .cta{margin-top:8px}
+.apply .note{margin-top:16px;text-align:center;font-size:.8125rem;color:var(--mute);line-height:1.7}
+
+/* ══ 12. 추신 ══ */
+.ps{border-top:1px solid var(--line);padding:72px 0 80px}
+@media(min-width:768px){.ps{padding:104px 0 112px}}
+.ps .wrap{max-width:600px}
+.ps span{display:block;font-size:.8125rem;letter-spacing:.06em;color:var(--mute)}
+.ps p{margin-top:18px;font-size:clamp(1rem,3.9vw,1.1875rem);line-height:1.62;letter-spacing:-.01em;color:#CFCFCF}
+.ps p+p{margin-top:22px}
+.ps b{color:var(--fg);font-weight:700}
+/* 가장 하고 싶은 말은 한 단계 크게, 앞뒤로 더 띄운다 */
+.ps .psem{margin-top:34px;font-size:1.16em;line-height:1.5;letter-spacing:-.02em}
+.ps .psem+p{margin-top:12px}
+
+/* ══ 푸터 ══ */
+.foot{border-top:1px solid var(--line);padding:36px 0 44px}
+.foot .wrap{max-width:760px}
+.foot p{font-size:.8125rem;color:#6A6A6A;line-height:1.85}
+
+/* ── 스크롤 등장 ──
+   .js 안에서만 숨긴다. 스크립트가 안 돌면 처음부터 다 보여야 한다. */
+.js [data-reveal]{opacity:0;transform:translateY(2rem);
+  transition:opacity .7s var(--ease),transform .7s var(--ease);
+  transition-delay:calc(var(--i,0) * 80ms)}
+.js [data-reveal].in{opacity:1;transform:translateY(0)}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important}
+  .js [data-reveal]{opacity:1 !important;transform:none !important}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+
+<!-- ══ 1. 히어로 ══ -->
+<section class="hero">
+  <div class="wrap">
+    <h1>
+      <em class="seq d1"><span class="yt">유튜브<i class="ytmark" aria-hidden="true"><img src="로고_유튜브2.png" alt="" width="519" height="379" decoding="async"></i></span>만 하면</em>
+      <em class="seq d2">매출도 오른다는 말</em>
+      <em class="dots" aria-hidden="true"><span class="dot seq-dot d3">.</span><span class="dot seq-dot d4">.</span><span class="dot seq-dot d5">.</span></em>
+    </h1>
+    <p class="hero-ask seq d6">진짜 그럴까요?</p>
+    <a class="cta cta-top seq d7" href="#apply">마케팅 진단 리포트 신청 (무료)</a>
+  </div>
+</section>
+
+
+
+<!-- ══ 1-1. 왜 그만두는가 ══ -->
+<section class="miss cover">
+  <div class="wrap">
+    <p class="mq" data-reveal>사람들은 이야기합니다.</p>
+    <p class="mquote" data-reveal style="--i:1">유튜브 해서 <b>대박 났다고.</b></p>
+    <p class="mdots" data-reveal style="--i:2" aria-hidden="true"><i></i><i></i></p>
+    <p class="mtail" data-reveal style="--i:3">그렇다면 왜<br><b>유튜브를 포기하는 사람들이<br>생기는 걸까요?</b></p>
+    <p class="mcap" data-reveal style="--i:4">중간에 포기한 비즈니스 유튜브 채널들</p>
+  </div>
+
+  <div class="mwrap qrow" data-reveal style="--i:2">
+    <span class="fade l"></span><span class="fade r"></span>
+    <div class="marquee"><div class="track">
+        <figure class="tile"><img src="포기한 유튜브 채널/1.png" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="tile"><img src="포기한 유튜브 채널/2.png" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="tile"><img src="포기한 유튜브 채널/3.png" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="tile"><img src="포기한 유튜브 채널/4.png" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="tile"><img src="포기한 유튜브 채널/5.png" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="tile"><img src="포기한 유튜브 채널/6.png" alt="" loading="lazy" decoding="async"></figure>
+
+        <figure class="tile" aria-hidden="true"><img src="포기한 유튜브 채널/1.png" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="tile" aria-hidden="true"><img src="포기한 유튜브 채널/2.png" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="tile" aria-hidden="true"><img src="포기한 유튜브 채널/3.png" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="tile" aria-hidden="true"><img src="포기한 유튜브 채널/4.png" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="tile" aria-hidden="true"><img src="포기한 유튜브 채널/5.png" alt="" loading="lazy" decoding="async"></figure>
+        <figure class="tile" aria-hidden="true"><img src="포기한 유튜브 채널/6.png" alt="" loading="lazy" decoding="async"></figure>
+    </div></div>
+  </div>
+
+</section>
+
+<!-- ══ 8. 오퍼 ══ -->
+<section class="offer">
+  <div class="wrap">
+    <div class="opening">
+      <span class="dots" aria-hidden="true" data-reveal><i></i><i></i><i></i><i></i></span>
+      <h2 data-reveal style="--i:1">100만원 상당의<br>마케팅 진단 리포트,<br><b>메일로 받아보세요.</b></h2>
+      <a class="cta cta-top" href="#apply" data-reveal style="--i:2">마케팅 진단 리포트 신청 (무료)</a>
+    </div>
+
+    <div class="cards">
+
+      <article class="card" data-reveal>
+        <span class="cnum">01</span>
+        <div>
+          <h3>롱폼 2편 로드맵</h3>
+          <p class="does">지금 바로 찍으실 수 있는 영상 2편을,<br>질문과 답변 형식으로 정리해 드립니다.</p>
+        </div>
+      </article>
+
+      <article class="card" data-reveal style="--i:1">
+        <span class="cnum">02</span>
+        <div>
+          <h3>니치 설정</h3>
+          <p class="does">수많은 경쟁자들 사이에서<br>여러분을 선택해야만 할<br>이유를 만듭니다.</p>
+        </div>
+      </article>
+
+      <article class="card" data-reveal style="--i:2">
+        <span class="cnum">03</span>
+        <div>
+          <h3>타겟 설정</h3>
+          <p class="does">실제로 여러분에게<br>돈을 쓸 사람들을 정하고,<br>그들을 위한 콘텐츠를 설계합니다.</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="dots link" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+    <div class="total" data-reveal>
+      <em>실제로 이 정도의 자료를 구매하려면<br><b class="cost">약 100만원</b>이 필요합니다.</em>
+      <small>크몽·숨고 공개 견적 기준</small>
+      <strong>지금 이 페이지에서만<br><b>무료</b>로 받아보실 수 있습니다.</strong>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ 2. 핵심 주장 ══ -->
+<section class="claim">
+  <div class="wrap">
+    <p data-reveal>비즈니스를 위한 유튜브에서 중요한 것은<br>조회수가 아닙니다.</p>
+
+    <p data-reveal style="--i:1">영상을 본 사람들을<br><span class="lime">여러분의 고객으로 만드는 것입니다.</span></p>
+
+    <div class="vs" data-reveal style="--i:2">
+      <div class="vscard bad">
+        <p>조회수는 나오는데<br><b>매출은 없는</b> 유튜브</p>
+        <svg class="spark" viewBox="0 0 132 58" aria-hidden="true">
+          <line class="base" x1="4" y1="52.5" x2="128" y2="52.5"></line>
+          <path class="views" d="M6,48 C34,44 52,24 70,16 S110,6 126,4"></path>
+          <path class="sales draw" style="--d:.15s" stroke-dasharray="130"
+                d="M6,47 C36,46.4 66,46 96,45.6 S120,45.2 126,45"></path>
+        </svg>
+      </div>
+      <div class="vscard good">
+        <p>조회수는 평범한데<br><b>매출은 폭발하는</b> 유튜브</p>
+        <svg class="spark" viewBox="0 0 132 58" aria-hidden="true">
+          <line class="base" x1="4" y1="52.5" x2="128" y2="52.5"></line>
+          <path class="views" d="M6,42 C40,40 78,36 126,32"></path>
+          <path class="sales draw" style="--d:1s" stroke-dasharray="130"
+                d="M6,47 C34,45 56,36 78,24 S112,8 126,5"></path>
+          <circle class="tip" cx="126" cy="5" r="4"></circle>
+        </svg>
+      </div>
+    </div>
+
+    <p class="handoff" data-reveal style="--i:3"><b>어느 쪽을 선택하시겠어요?</b></p>
+  </div>
+</section>
+
+<!-- ══ 3. 소개 영상 ══ -->
+<section class="video">
+  <div class="wrap">
+    <h2 class="vhead" data-reveal>잠깐만 시간을 내서<br><b>이 영상을 확인해주세요.</b></h2>
+    <div class="vframe" data-reveal style="--i:1">
+      <video id="introVideo" preload="none" playsinline poster="assets/intro_poster.jpg"
+             src="assets/intro_260831.mp4" width="1920" height="1080"></video>
+      <button class="vplay" type="button" aria-label="소개 영상 재생 (2분 49초)">
+        <i><svg width="26" height="30" viewBox="0 0 26 30" aria-hidden="true"><path d="M25 15 0 30V0z" fill="#0E0E0E"/></svg></i>
+      </button>
+    </div>
+    <p class="vcap" data-reveal style="--i:2">2분 49초 · 소리를 켜고 봐주세요</p>
+
+    <a class="cta" href="#apply" data-reveal style="--i:3">마케팅 진단 리포트 신청 (무료)</a>
+  </div>
+</section>
+
+<!-- ══ 4. 선언 한 줄 ══ -->
+<section class="creed">
+  <div class="wrap">
+    <p data-reveal>여러분이 해야 할 것은<br>유튜브가 아닙니다.<br><span class="l2"><b>마케팅</b>입니다.</span></p>
+  </div>
+</section>
+
+<!-- ══ 6. 유튜브로 성공하는 비즈니스의 비밀 (8단계) ══ -->
+<section class="how">
+  <div class="wrap">
+    <h2 data-reveal>유튜브로 성공하는 비즈니스는<br><b>전략이 있습니다.</b></h2>
+    <p class="lead" data-reveal style="--i:1">지금 하고 계신 것과 비교해보세요.</p>
+
+    <div class="flow">
+      <div class="fstep" data-reveal style="--i:0">
+        <div class="fbox">
+          <span class="fno">STEP 01</span>
+        <ul>
+          <li>핵심 강점 도출 + 타겟 설정</li>
+        </ul>
+        </div>
+      </div>
+      <div class="fstep" data-reveal style="--i:1">
+        <div class="fbox">
+          <span class="fno">STEP 02</span>
+        <ul>
+          <li>타겟 특화 브랜딩 + 유튜브 채널 개설</li>
+        </ul>
+        </div>
+      </div>
+      <div class="fstep" data-reveal style="--i:2">
+        <div class="fbox">
+          <span class="fno">STEP 03</span>
+        <ul>
+          <li>타겟 페르소나 고도화</li>
+          <li>고관여 시청자층 추출</li>
+        </ul>
+        </div>
+      </div>
+      <div class="fstep" data-reveal style="--i:2">
+        <div class="fbox">
+          <span class="fno">STEP 04</span>
+        <ul>
+          <li>유튜브 SEO 및 AEO 최적화 작업</li>
+        </ul>
+        </div>
+      </div>
+      <div class="fstep" data-reveal style="--i:2">
+        <div class="fbox">
+          <span class="fno">STEP 05</span>
+        <ul>
+          <li>비즈니스 특성을 고려한 맞춤 대본 작성</li>
+          <li>영상 촬영</li>
+          <li>고퀄리티 편집</li>
+          <li>업로드 및 데이터 추적 관리</li>
+        </ul>
+        </div>
+      </div>
+      <div class="fstep" data-reveal style="--i:2">
+        <div class="fbox">
+          <span class="fno">STEP 06</span>
+        <ul>
+          <li>고관여 DB 확보를 위한 랜딩 페이지 설계</li>
+        </ul>
+        </div>
+      </div>
+      <div class="fstep" data-reveal style="--i:2">
+        <div class="fbox">
+          <span class="fno">STEP 07</span>
+        <ul>
+          <li>유튜브 시청자 데이터 + 인입된 DB 교차 분석</li>
+        </ul>
+        </div>
+      </div>
+      <div class="fstep done" data-reveal style="--i:2">
+        <div class="fbox">
+          <span class="fno">STEP 08</span>
+        <ul>
+          <li>데이터 기반 세일즈 퍼널 구축 완료</li>
+        </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ 5. 카톡 후기 ══ -->
+<section class="reviews">
+  <div class="wrap">
+    <h2 data-reveal>고객의 성과를<br><b>홍보에 사용하지 않습니다.</b></h2>
+    <p class="note" data-reveal style="--i:1">모든 계약에는<br>비밀유지 의무조항이 포함되어 있습니다.<br>이 자리에서 제가 공개할 수 있는 것은<br>저와 함께 성과를 만들어 내신 분들의<br><b>감사 인사</b>뿐입니다.</p>
+  </div>
+
+  <!-- 카톡 후기 12장. 한 줄 6장씩 두 줄, 각 줄은 같은 6장을 두 벌 이어 붙여 끊김 없이 돈다.
+       파일은 assets/후기카톡/01~12.jpg (원본은 '카카오톡 후기' 폴더의 png).
+       센 것부터 앞에 놓는다. 01 = 원본 12번(문의 8명·결제 6명).
+       띠에서는 글자가 안 읽히므로 핵심 문장을 figcaption 으로 함께 적는다. -->
+  <div class="rows" data-reveal style="--i:2">
+  <div class="mwrap">
+    <span class="fade l"></span><span class="fade r"></span>
+    <div class="marquee"><div class="track">
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/01.jpg" alt="1주일 만에 문의 8명, 결제 6명" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>1주일 만에 문의 8명, 결제 6명</figcaption></figure>
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/02.jpg" alt="영상 1개로 일 매출 200만원" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>영상 1개로 일 매출 200만원</figcaption></figure>
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/03.jpg" alt="지인 5명을 소개했고 3명이 계약했습니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>지인 5명을 소개했고 3명이 계약했습니다</figcaption></figure>
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/04.jpg" alt="유튜브를 하는 것과 돈을 버는 것은 다릅니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>유튜브를 하는 것과 돈을 버는 것은 다릅니다</figcaption></figure>
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/05.jpg" alt="그냥 이 업계 치트키 그 자체입니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>그냥 이 업계 치트키 그 자체입니다</figcaption></figure>
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/06.jpg" alt="솔직히 저만 알고 싶은 분이에요" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>솔직히 저만 알고 싶은 분이에요</figcaption></figure>
+
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/01.jpg" alt="1주일 만에 문의 8명, 결제 6명" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>1주일 만에 문의 8명, 결제 6명</figcaption></figure>
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/02.jpg" alt="영상 1개로 일 매출 200만원" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>영상 1개로 일 매출 200만원</figcaption></figure>
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/03.jpg" alt="지인 5명을 소개했고 3명이 계약했습니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>지인 5명을 소개했고 3명이 계약했습니다</figcaption></figure>
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/04.jpg" alt="유튜브를 하는 것과 돈을 버는 것은 다릅니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>유튜브를 하는 것과 돈을 버는 것은 다릅니다</figcaption></figure>
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/05.jpg" alt="그냥 이 업계 치트키 그 자체입니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>그냥 이 업계 치트키 그 자체입니다</figcaption></figure>
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/06.jpg" alt="솔직히 저만 알고 싶은 분이에요" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>솔직히 저만 알고 싶은 분이에요</figcaption></figure>
+    </div></div>
+  </div>
+  <div class="mwrap">
+    <span class="fade l"></span><span class="fade r"></span>
+    <div class="marquee"><div class="track rev">
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/07.jpg" alt="화려한데 돈이 안 되는 영상을 비싸게 찍고 있었습니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>화려한데 돈이 안 되는 영상을 비싸게 찍고 있었습니다</figcaption></figure>
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/08.jpg" alt="조회수는 나와도 왜 모객이 안 되는지 보입니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>조회수는 나와도 왜 모객이 안 되는지 보입니다</figcaption></figure>
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/09.jpg" alt="자칭 1위 대행사도 겪어봤지만 문의량이 늘었습니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>자칭 1위 대행사도 겪어봤지만 문의량이 늘었습니다</figcaption></figure>
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/10.jpg" alt="알고 있다고 생각한 것들이 일에는 도움이 안 됐습니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>알고 있다고 생각한 것들이 일에는 도움이 안 됐습니다</figcaption></figure>
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/11.jpg" alt="사업을 하시는 분들이라면 적극 추천합니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>사업을 하시는 분들이라면 적극 추천합니다</figcaption></figure>
+      <figure class="tile"><span class="shot"><img src="assets/후기카톡/12.jpg" alt="테크닉보다 시청자와의 관계가 중요했습니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>테크닉보다 시청자와의 관계가 중요했습니다</figcaption></figure>
+
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/07.jpg" alt="화려한데 돈이 안 되는 영상을 비싸게 찍고 있었습니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>화려한데 돈이 안 되는 영상을 비싸게 찍고 있었습니다</figcaption></figure>
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/08.jpg" alt="조회수는 나와도 왜 모객이 안 되는지 보입니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>조회수는 나와도 왜 모객이 안 되는지 보입니다</figcaption></figure>
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/09.jpg" alt="자칭 1위 대행사도 겪어봤지만 문의량이 늘었습니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>자칭 1위 대행사도 겪어봤지만 문의량이 늘었습니다</figcaption></figure>
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/10.jpg" alt="알고 있다고 생각한 것들이 일에는 도움이 안 됐습니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>알고 있다고 생각한 것들이 일에는 도움이 안 됐습니다</figcaption></figure>
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/11.jpg" alt="사업을 하시는 분들이라면 적극 추천합니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>사업을 하시는 분들이라면 적극 추천합니다</figcaption></figure>
+      <figure class="tile" aria-hidden="true"><span class="shot"><img src="assets/후기카톡/12.jpg" alt="테크닉보다 시청자와의 관계가 중요했습니다" width="864" height="1080" loading="lazy" decoding="async"></span><figcaption>테크닉보다 시청자와의 관계가 중요했습니다</figcaption></figure>
+    </div></div>
+  </div>
+  </div>
+</section>
+
+
+
+<!-- ══ 7. 대표 소개 ══ -->
+<section class="founder">
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="photo" data-reveal>
+        <img src="assets/프로필.jpg" alt="플로우애즈 대표" width="400" height="400" loading="lazy" decoding="async">
+      </div>
+
+      <div class="fbody">
+        <p class="hello" data-reveal>안녕하세요.<br>플로우애즈 대표 <span class="sign">이민재</span>입니다.</p>
+        <h2 data-reveal style="--i:1">오직 입소문으로만 이어진<br><b>콘텐츠 마케팅 전문가</b></h2>
+
+        <ul class="bio" data-reveal style="--i:1">
+          <li>11년 차 마케팅 기획자</li>
+          <li>비즈니스 마케팅 전문 에이전시 <b>플로우애즈</b> 대표</li>
+          <li>자사 사업 매출 <b>50억 이상</b></li>
+        </ul>
+
+        <!-- 목록 항목이 아니라 한 줄 증명. 페이지 앞의 주장(조회수 말고 매출)을
+             대표 본인 사례로 받는 자리다. -->
+        <p class="proofline" data-reveal style="--i:1">구독자 2천 명짜리 채널 하나로<br>월 매출 <b>3,000만 원</b></p>
+
+        <p data-reveal style="--i:2">11년 전, 대기업 D사를 퇴사하고<br>블로그로 마케팅을 시작한 저는<br>어느새 <b>7년 차 콘텐츠 마케팅 회사</b>의<br>대표가 되었습니다.</p>
+
+        <p data-reveal style="--i:3">예전엔 블로그로도 충분했습니다.<br>하지만 지금의 마케팅에서<br>유튜브는 빼놓을 수 없는 존재가 되었죠.<br>그래서 유튜브를 기반으로 한<br>콘텐츠 마케팅에 집중하기 시작했습니다.</p>
+
+        <p data-reveal style="--i:4">자주 가던 정형외과 원장님을 시작으로<br>변호사, 변리사와 같은 전문직,<br>그리고 동네 음식점부터 프랜차이즈 본사까지<br>수많은 영역에서 비즈니스의 성공을<br>함께 만들어왔습니다.</p>
+
+        <p data-reveal style="--i:5">저와 함께 일하지 않으셔도 괜찮습니다.<br>대신 지금 딱 하나만 생각해보세요.</p>
+
+        <p class="fask pos" data-reveal style="--i:6">여러분은 지금<br><b>비즈니스를 위해 유튜브를 하고 있나요?</b></p>
+
+        <p class="fask neg" data-reveal style="--i:7">아니면<br><b>조회수의 노예가 되고 있나요?</b></p>
+
+        <p data-reveal style="--i:8">비즈니스를 위한 유튜브 마케팅은<br>어떻게 해야 하는지<br><em>제가 직접 알려드리겠습니다.</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 9. 마무리 ══ -->
+<section class="close">
+  <div class="wrap">
+    <a class="cta" href="#apply" data-reveal>마케팅 진단 리포트 신청 (무료)</a>
+  </div>
+</section>
+
+<!-- ══ 10. 자주 묻는 질문 ══ -->
+<section class="faq">
+  <div class="wrap">
+    <h2 data-reveal><b>자주 받는 질문</b></h2>
+
+    <div class="qlist">
+      <details class="q" data-reveal>
+        <summary>정말 무료인가요?</summary>
+        <p>네, <b>100만원 상당의 마케팅 진단은 무료</b>입니다. 백번 잘한다고 설명해도 여러분 입장에서는 의미가 없습니다. 실질적인 도움이 될 만한 리포트를 보여드리는 것이 저에게도, 여러분에게도 훨씬 가치가 있습니다.</p>
+      </details>
+      <details class="q" data-reveal style="--i:1">
+        <summary>유튜브를 해본 적이 없는데 신청해도 되나요?</summary>
+        <p>네, 됩니다. 채널이 있으시면 그 채널을 기준으로, 아직 없으시면 <b>어떻게 시작하면 좋을지에 대한 계획</b>을 수립합니다. 오히려 시작하지 않은 분이 유리한 경우도 많습니다.</p>
+      </details>
+      <details class="q" data-reveal style="--i:2">
+        <summary>어떤 업종이 효과가 좋을까요?</summary>
+        <p>고객 한 명당 매출이 큰 비즈니스일수록 <b>성과가 빨리 보입니다</b>. (병의원, 변호사·변리사 같은 전문직, 인테리어·시공, 학원, 프랜차이즈 등)</p>
+        <!-- TODO: 위 업종 예시를 비블 목록으로 교체 -->
+        <p>객단가가 낮은 비즈니스라고 효과가 없다는 뜻은 아닙니다. 성과가 눈에 보이기까지 걸리는 시간에서 차이가 날 수밖에 없다는 의미입니다.</p>
+      </details>
+      <details class="q" data-reveal style="--i:3">
+        <summary>리포트는 언제 받아볼 수 있나요?</summary>
+        <p>평균 <b>5영업일</b> 내에 메일로 보내드립니다. 모두 대표인 제가 직접 작성하기 때문에 시간이 소요될 수 있습니다.</p>
+      </details>
+      <details class="q" data-reveal style="--i:4">
+        <summary>대행 비용은 얼마인가요?</summary>
+        <p><b>베이직 월 320만원</b>(VAT 별도) — 기획·편집·업로드·채널관리, 본인 직접 촬영.<br><b>프리미엄 월 400만원</b>(VAT 별도) — 기획·편집·업로드·채널관리 + 전문 감독 촬영.<br>결과물 — 월 <b>롱폼 4개 + 쇼츠 10개</b>.<br>기타 — 위 내용에 포함되지 않는 작업은 협의 후 결정됩니다. 서울·경기 외 지역은 경우에 따라 소정의 출장비가 발생할 수 있습니다.</p>
+      </details>
+      <details class="q" data-reveal style="--i:4">
+        <summary>계약 기간은 얼마나 되나요?</summary>
+        <p>첫 계약은 <b>3개월</b>이며, 이후 월 단위로 연장됩니다. 유튜브 알고리즘이 채널을 학습하는 데 평균적으로 3개월가량 소요되기 때문입니다.</p>
+        <p>평균적으로 성과가 도출되기까지 <b>6개월</b>, 안정기에 접어들기까지 <b>12개월</b>이 소요됩니다.</p>
+      </details>
+      <details class="q" data-reveal style="--i:4">
+        <summary>성과를 보장해주시나요?</summary>
+        <p>구독자 수와 조회수는 <b>약속하지 않습니다</b>. 지킬 수 없는 약속은 결국 고객을 속이는 일이 되기 때문입니다. 실제로 어뷰징으로 숫자를 만들어 보여주는 곳이 적지 않습니다.</p>
+        <p>대신 약속드릴 수 있는 것이 있습니다. 여러분의 비즈니스를 <b>여러분보다 더 깊게 연구하겠습니다</b>.</p>
+      </details>
+      <details class="q" data-reveal style="--i:4">
+        <summary>채널과 영상의 소유권은 누구에게 있나요?</summary>
+        <p>유튜브 채널과 업로드된 영상은 <b>모두 고객님의 소유</b>입니다(계약서에 명시해 드립니다). 계약이 종료되더라도 소유권에 대한 문제는 절대 발생하지 않습니다.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 12. 추신 ══ -->
+<section class="ps">
+  <div class="wrap">
+    <span data-reveal>P.S.</span>
+    <p data-reveal style="--i:1">유튜브를 하지 말라는 말이 아닙니다.<br>잠깐만 멈춰서 생각해보시라는 말입니다.</p>
+    <p data-reveal style="--i:2">대부분은 채널부터 만들고<br>어떤 영상을 찍을지 고민합니다.<br>그렇게 해서 조회수가 오른다고 하더라도<br>매출에는 도움이 되지 않을 겁니다.</p>
+    <p class="psem" data-reveal style="--i:3"><b>비즈니스만으로도 충분히 바쁘시다는 것을<br>잘 알고 있습니다.</b></p>
+    <p data-reveal style="--i:4">여러분의 시간을 가장 효율적으로 쓰는 방법을<br><b>리포트로 받아보세요.</b></p>
+  </div>
+</section>
+
+<!-- ══ 13. 마지막 신청 ══ -->
+<section class="close last">
+  <div class="wrap">
+    <a class="cta" href="#apply" data-reveal>마케팅 진단 리포트 신청 (무료)</a>
+  </div>
+</section>
+
+<!-- ══ 푸터 ══ -->
+<footer class="foot">
+  <div class="wrap">
+    <p>플로우애즈 · 이민재 · 211-11-20640 · 경기도 하남시 미사강변서로 22, 9층 906호(풍산동, 에코큐브 지식산업센터)<br>ⓒ 2026. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- ══ 신청 폼 — 3단계 모달 ══ -->
+<div class="modal" id="apply" role="dialog" aria-modal="true" aria-label="진단 리포트 신청">
+  <div class="modal-panel">
+    <button class="modal-x" type="button" aria-label="닫기">×</button>
+    <div class="apply">
+      <div class="pbar" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+      <p class="pnum"><span data-cur>1</span> / 3</p>
+
+      <!-- 신청·질문지는 스크립트에서 Apps Script 웹앱으로 보낸다.
+           보낼 주소는 아래 스크립트의 ENDPOINT 한 곳에서 관리한다. -->
+      <form class="form" onsubmit="return false;">
+
+        <!-- ── 1단계. 클릭만 ── -->
+        <div class="step on" data-step="1">
+          <div class="shead">
+            <h2>안녕하세요.<br><b>반갑습니다.</b></h2>
+            <p class="lead">1분만 시간을 내서 설문을 작성해주세요.</p>
+          </div>
+
+          <input type="hidden" name="src" value="flo_channel">
+          <fieldset class="field">
+            <legend>플로우애즈를 어떻게 알게 되셨나요 <i>*</i></legend>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="from" value="유튜브" required><span>유튜브</span></label>
+              <label class="opt"><input type="radio" name="from" value="인스타그램"><span>인스타그램</span></label>
+              <label class="opt"><input type="radio" name="from" value="스레드"><span>스레드</span></label>
+              <label class="opt"><input type="radio" name="from" value="검색·블로그"><span>검색·블로그</span></label>
+              <label class="opt"><input type="radio" name="from" value="지인 소개"><span>지인 소개</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend>지금 유튜브 채널을 운영하고 계신가요 <i>*</i></legend>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="stage" value="운영 중" required><span>네, 운영 중입니다</span></label>
+              <label class="opt"><input type="radio" name="stage" value="준비 중"><span>아직 시작 전입니다</span></label>
+              <label class="opt"><input type="radio" name="stage" value="중단"><span>하다가 멈췄습니다</span></label>
+            </div>
+          </fieldset>
+
+          <div class="nav">
+            <button class="cta" type="button" data-next>다음</button>
+          </div>
+        </div>
+
+        <!-- ── 2단계. 연락처 ── -->
+        <div class="step" data-step="2">
+          <div class="shead"><h2>기본 정보</h2></div>
+
+          <div class="field">
+            <label for="f-name">성함 <i>*</i></label>
+            <input id="f-name" name="name" type="text" placeholder="홍길동" required>
+          </div>
+
+          <div class="field">
+            <label for="f-biz-name">상호 (사업장명) <i>*</i></label>
+            <input id="f-biz-name" name="biz_name" type="text" placeholder="예) 평촌 밝은미소 교정치과" required>
+            <small>이 이름으로 찾아보고 리포트를 씁니다.</small>
+          </div>
+
+          <div class="field">
+            <label for="f-tel">연락처 <i>*</i></label>
+            <input id="f-tel" name="tel" type="tel" inputmode="numeric" placeholder="010-0000-0000" required>
+          </div>
+
+          <div class="field">
+            <label for="f-mail">이메일 <i>*</i></label>
+            <input id="f-mail" name="email" type="email" inputmode="email" placeholder="example@email.com" required>
+            <small>리포트는 이 주소로만 보내드립니다.</small>
+          </div>
+
+          <div class="field">
+            <label for="f-url">운영 중인 채널 (선택)</label>
+            <small>있는 것만 넣어주시고, 없으면 비워두셔도 됩니다.</small>
+            <input id="f-url" name="url" type="url" placeholder="유튜브 주소">
+          </div>
+
+          <div class="field">
+            <input id="f-blog" name="blog" type="url" placeholder="블로그 주소">
+          </div>
+
+          <div class="field">
+            <input id="f-insta" name="insta" type="url" placeholder="인스타그램 주소">
+          </div>
+
+          <div class="field">
+            <input id="f-place" name="place" type="url" placeholder="네이버 플레이스 주소">
+          </div>
+
+          <div class="nav">
+            <button class="btn-back" type="button" data-prev>이전</button>
+            <button class="cta" type="button" data-next>다음</button>
+          </div>
+        </div>
+
+        <!-- ── 3단계. 리포트 재료 ── -->
+        <div class="step" data-step="3">
+          <div class="shead"><h2>상세 정보</h2></div>
+
+          <fieldset class="field">
+            <legend>유튜브 채널 운영 목적 <i>*</i></legend>
+            <div class="opts stack">
+              <label class="opt"><input type="radio" name="goal" value="비즈니스·브랜드 홍보" required><span><b>비즈니스·브랜드 홍보</b><small>유튜브로 고객·매출 만들기</small></span></label>
+              <label class="opt"><input type="radio" name="goal" value="퍼스널 브랜딩"><span><b>퍼스널 브랜딩</b><small>개인 채널 성장 &amp; 수익화</small></span></label>
+              <label class="opt"><input type="radio" name="goal" value="구독자·조회수 성장"><span><b>구독자·조회수 성장</b><small>채널 규모 키우기</small></span></label>
+              <label class="opt"><input type="radio" name="goal" value="기타" data-etc><span><b>기타</b><small>직접 입력</small></span></label>
+            </div>
+            <input class="etc-in" id="f-goal-etc" name="goal_etc" type="text" placeholder="어떤 목적인지 적어주세요" hidden>
+          </fieldset>
+
+          <div class="field">
+            <label for="f-biz">업종 <i>*</i></label>
+            <input id="f-biz" name="biz" type="text" placeholder="예) 한의원" required>
+          </div>
+
+          <div class="field">
+            <label for="f-area">지역 <i>*</i></label>
+            <input id="f-area" name="area" type="text" placeholder="예) 경기도 하남시 (시 단위까지 적어주세요)" required>
+          </div>
+
+          <div class="field">
+            <label for="f-etc">지금 하고 계신 다른 마케팅</label>
+            <input id="f-etc" name="etc" type="text" placeholder="예) 블로그, 인스타그램, 네이버 광고">
+          </div>
+
+          <div class="field">
+            <label for="f-memo">지금 가장 답답한 점 <i>*</i></label>
+            <textarea id="f-memo" name="memo" placeholder="영상은 올리는데 문의가 없습니다" required></textarea>
+          </div>
+
+          <label class="agree">
+            <input type="checkbox" name="agree" required>
+            <span>진단 리포트 발송을 위한 개인정보 수집·이용에 동의합니다. 수집한 개인정보는 진단 리포트 작성에만 사용됩니다.</span>
+          </label>
+
+          <div class="nav">
+            <button class="btn-back" type="button" data-prev>이전</button>
+            <button class="cta" type="submit">마케팅 진단 리포트 신청 (무료)</button>
+          </div>
+          <!-- TODO(광고 전 필수): 신청 완료 화면에 미팅 예약 링크. 리포트 메일에도 같은 링크. -->
+          <p class="note">보내주신 내용을 기반으로<br>콘텐츠 전략 리포트 작성을 시작합니다.<br>리포트는 평균 5영업일 내<br>메일로만 발송되며 영업 전화는 걸지 않습니다.</p>
+        </div>
+        </div>
+
+        <!-- 4단계: 신청 완료 + 니치 질문지. 리포트의 차별화 포인트를 여기서 받는다. -->
+        <div class="step" data-step="4">
+
+          <div class="dhead">
+            <p class="deb">신청 완료</p>
+            <h3>신청이 접수되었습니다.</h3>
+            <p>리포트는 평균 5영업일 안에 메일로 보내드립니다.</p>
+          </div>
+
+          <div class="qintro">
+            <b>한 가지만 더 부탁드립니다.</b>
+            <p>아래 답변이 리포트의 차별화 포인트가 됩니다.<br>이 답이 없으면 누구에게나 해당하는 일반론밖에 드릴 수 없습니다.<br>한두 줄씩이면 충분합니다.</p>
+          </div>
+
+          <div class="field">
+            <label for="f-q1">1. 매출 비중이 가장 높은 서비스와 객단가를 알려주세요.</label>
+            <small>더 많이 팔고 싶은 것이 따로 있다면 같이 적어주세요.</small>
+            <input id="f-q1" name="q1" type="text" placeholder="예) 3개월 관리 프로그램 / 240만원">
+          </div>
+          <div class="field">
+            <label for="f-q2">2. 그 서비스를 가장 많이 구매하는 분은 어떤 분인가요?</label>
+            <textarea id="f-q2" name="q2" placeholder="예) 40대 초반 여성, 다이어트를 실패해본 분"></textarea>
+          </div>
+          <div class="field">
+            <label for="f-q3">3. 상담에서 가장 자주 받는 질문 세 개는 무엇인가요?</label>
+            <textarea id="f-q3" name="q3" placeholder="예) 얼마나 걸리나요 / 효과 있나요 / 비용은요"></textarea>
+          </div>
+          <div class="field">
+            <label for="f-q4">4. 다른 곳과 차별화된 장점 하나를 꼽는다면?</label>
+            <textarea id="f-q4" name="q4" placeholder=""></textarea>
+          </div>
+          <div class="field">
+            <label for="f-q5">5. 만족한 고객이 했던 말 중 기억에 남는 것을 알려주세요.</label>
+            <textarea id="f-q5" name="q5" placeholder=""></textarea>
+          </div>
+          <div class="field">
+            <label for="f-q6">6. 유튜브에 얼굴이 공개돼도 괜찮으신가요?</label>
+            <small>한 달에 촬영을 위해 확보할 수 있는 시간도 같이 적어주세요.</small>
+            <textarea id="f-q6" name="q6" placeholder="예) 가능 / 한 달에 4시간 정도"></textarea>
+          </div>
+
+          <button class="cta" type="button" data-qsend>질문지 보내기</button>
+          <!-- TODO(광고 전 필수): 이 아래에 미팅 예약 링크. 리포트 메일에도 같은 링크. -->
+          <p class="note">지금 어려우시면 신청완료 안내 메일에 있는 링크로<br>나중에 작성하셔도 됩니다.</p>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="크게 보기"><img src="" alt=""></div>
+
+<script>
+  var reveals = document.querySelectorAll('[data-reveal]');
+  var ioLive = false;              // 진입 감지가 실제로 도는 환경인지
+
+  // 안전장치. 화면 높이를 0으로 잡는 뷰어(문서 미리보기 창 등)에서는
+  // 스크롤 진입 감지가 아예 돌지 않아 페이지가 검게 남는다.
+  // 1.2초 안에 아무것도 안 떴으면 그냥 전부 보여준다.
+  function revealAll(){
+    for(var i = 0; i < reveals.length; i++){ reveals[i].classList.add('in'); }
+  }
+  setTimeout(function(){
+    if(!document.querySelector('[data-reveal].in')){ revealAll(); }
+  }, 1200);
+
+  try{
+
+  var ro = new IntersectionObserver(function(entries){
+    ioLive = true;
+    // 한 번에 여러 개가 들어오면 순서대로 늦춰서 차례로 떠오르게 한다
+    var n = 0;
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        if(!e.target.style.getPropertyValue('--i')){ e.target.style.setProperty('--i', n); }
+        n++;
+        e.target.classList.add('in'); ro.unobserve(e.target);
+      }
+    });
+  }, { threshold: .15, rootMargin: '0px 0px -8% 0px' });
+  reveals.forEach(function(el){ ro.observe(el); });
+
+  // 숫자가 화면에 들어오면 0부터 차르르 올라간다. 한 번만 돈다.
+  var noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var counters = document.querySelectorAll('[data-count]');
+  var co = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      co.unobserve(e.target);
+      var end = parseInt((e.target.getAttribute('data-count') || '').replace(/[^0-9]/g, ''), 10);
+      if(isNaN(end)) return;                       // 숫자가 아직 안 들어온 자리표시는 건드리지 않는다
+      if(noMotion){ e.target.textContent = end.toLocaleString('ko-KR'); return; }
+      var dur = 1400, t0 = null, done = false;
+      requestAnimationFrame(function step(ts){
+        if(t0 === null) t0 = ts;
+        var p = Math.min((ts - t0) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 4);        // 빠르게 올라가다 끝에서 천천히 멎는다
+        e.target.textContent = Math.round(end * eased).toLocaleString('ko-KR');
+        if(p < 1){ requestAnimationFrame(step); } else { done = true; e.target.dataset.done = '1'; }
+      });
+      // 프레임이 안 도는 환경(숨은 탭 등)에서도 최종 숫자는 반드시 찍힌다
+      setTimeout(function(){
+        if(done) return;
+        e.target.textContent = (parseInt(e.target.getAttribute('data-count'),10) || end).toLocaleString('ko-KR');
+        e.target.dataset.done = '1';
+      }, dur + 400);
+    });
+  }, { threshold: .6 });
+  counters.forEach(function(el){ co.observe(el); });
+
+  }catch(err){ revealAll(); }   // 감지 기능이 없는 환경이면 전부 보여준다
+
+  // 히어로 → 핵심 주장 전환. 히어로가 붙어 있는 동안 한 화면 분량에 걸쳐
+  // 뒤로 물러나며 흐려지고, 다음 판이 그 위를 덮는다.
+  var hero = document.querySelector('.hero');
+  var heroInner = hero && hero.querySelector('.wrap');
+  var slow = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var last = -1;
+  function paintHero(){
+    if(!heroInner || slow) return;
+    // 프레임 콜백에 맡기면 화면을 안 그리는 뷰어에서 값이 아예 안 들어간다. 바로 계산한다.
+    var span = hero.offsetHeight || window.innerHeight || 600;
+    var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+    var p = Math.min(Math.max(y / span, 0), 1);
+    if(Math.abs(p - last) < 0.004) return;            // 같은 값이면 다시 쓰지 않는다
+    last = p;
+    var e = p * p;                                    // 처음엔 거의 안 움직이다 끝에서 빠르게
+    heroInner.style.setProperty('--out-o', (1 - e * 1.15).toFixed(3));
+    heroInner.style.setProperty('--out-s', (1 - e * 0.12).toFixed(4));
+    heroInner.style.setProperty('--out-y', (-e * 56).toFixed(1) + 'px');
+  }
+
+  // ── 단계 흐름선. 스크롤을 내린 만큼 선이 차오르고 지나온 점이 켜진다. ──
+  var flow = document.querySelector('.flow');
+  var fsteps = flow ? [].slice.call(flow.querySelectorAll('.fstep')) : [];
+  var dotY = [], trackY0 = 22, trackLen = 0, scrolled = false;
+  function measureFlow(){
+    if(!flow || fsteps.length < 2) return;
+    // 등장 전 카드는 아래로 44px 밀려 있다. 화면 좌표로 재면 그만큼 어긋나므로
+    // 밀림과 무관한 배치 좌표(offsetTop)로 잰다.
+    dotY = fsteps.map(function(st){ return st.offsetTop + 22; });
+    trackY0 = dotY[0];
+    trackLen = dotY[dotY.length - 1] - trackY0;
+    flow.style.setProperty('--y0', trackY0 + 'px');
+    flow.style.setProperty('--len', trackLen + 'px');
+  }
+  function paintFlow(p){
+    if(!flow || !trackLen) return;
+    flow.style.setProperty('--p', p.toFixed(4));
+    var head = trackY0 + trackLen * p;
+    for(var i = 0; i < fsteps.length; i++){
+      fsteps[i].classList.toggle('lit', head >= dotY[i] - 1);
+    }
+  }
+  function updateFlow(){
+    if(!flow || !trackLen) return;
+    var fr = flow.getBoundingClientRect();
+    var readLine = window.innerHeight * 0.62;   // 화면의 이 높이를 지나면 지나온 것으로 본다
+    var p = (readLine - (fr.top + trackY0)) / trackLen;
+    p = Math.min(Math.max(p, 0), 1);
+    if(p > 0){ scrolled = true; }
+    paintFlow(p);
+  }
+
+  function onScroll(){ paintHero(); updateFlow(); }
+  measureFlow();
+  if(slow){
+    paintFlow(1);                                // 움직임을 줄인 설정이면 처음부터 다 채워둔다
+  }else{
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', function(){ measureFlow(); onScroll(); }, { passive: true });
+    window.addEventListener('load', function(){ measureFlow(); onScroll(); });
+    onScroll();
+    // 스크롤이 일어나지 않는 뷰어에서는 선이 0인 채로 남는다. 한 박자 뒤 채운다.
+    setTimeout(function(){
+      if(scrolled) return;
+      flow && flow.classList.add('instant');   // 전환을 끊어 결과 상태만 남긴다
+      measureFlow(); paintFlow(1);
+    }, 2600);
+  }
+
+  var lb = document.getElementById('lb');
+  var lbImg = lb.querySelector('img');
+  document.querySelectorAll('.tile img, .proof img').forEach(function(img){
+    img.parentElement.addEventListener('click', function(){
+      lbImg.src = img.getAttribute('src');
+      lbImg.alt = img.getAttribute('alt');
+      lb.classList.add('on');
+    });
+  });
+  lb.addEventListener('click', function(){ lb.classList.remove('on'); });
+
+  // ── 신청 폼 모달 ──
+  // 신청 흐름 어디서 빠지는지 보려고 단계마다 메타에 기록을 남긴다. 같은 기록은 한 번만.
+  var sent = {};
+  function track(name){
+    if(sent[name] || !window.fbq){ return; }
+    sent[name] = true;
+    fbq('trackCustom', name);
+  }
+  var apply = document.getElementById('apply');
+  function openApply(){
+    apply.classList.remove('out');
+    apply.classList.add('on');
+    document.body.classList.add('noscroll');
+    apply.scrollTop = 0;
+    goStep(0);
+  }
+
+  // ── 단계 이동 ──
+  var steps = apply.querySelectorAll('.step');
+  var bars = apply.querySelectorAll('.pbar i');
+  var curNum = apply.querySelector('[data-cur]');
+  var cur = 0;
+  var pbarEl = apply.querySelector('.pbar');
+  var pnumEl = apply.querySelector('.pnum');
+  function goStep(i){
+    cur = i;
+    for(var n = 0; n < steps.length; n++){ steps[n].classList.toggle('on', n === i); }
+    for(var b = 0; b < bars.length; b++){ bars[b].classList.toggle('on', b <= i); }
+    curNum.textContent = i + 1;
+    if(i > 0 && i < steps.length - 1){ track('ApplyStep' + (i + 1)); }
+    // 마지막(신청 완료 + 질문지)은 단계 표시를 감춘다. 3칸짜리 표시에 4가 뜨면 이상하다.
+    var last = (i === steps.length - 1);
+    if(pbarEl){ pbarEl.hidden = last; }
+    if(pnumEl){ pnumEl.hidden = last; }
+    apply.scrollTop = 0;
+  }
+  // 지금 단계의 칸이 다 채워졌는지 본다. 브라우저 기본 안내 문구를 그대로 쓴다.
+  function stepValid(){
+    var f = steps[cur].querySelectorAll('input,textarea,select');
+    for(var i = 0; i < f.length; i++){
+      if(!f[i].checkValidity()){ f[i].reportValidity(); return false; }
+    }
+    return true;
+  }
+  // 기타를 고르면 직접 입력칸을 연다. 숨어 있는 동안은 필수로 걸지 않는다.
+  var etcIn = apply.querySelector('.etc-in');
+  apply.querySelectorAll('input[name="goal"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      var on = apply.querySelector('input[data-etc]').checked;
+      etcIn.hidden = !on;
+      if(on){ etcIn.focus(); }
+    });
+  });
+
+  apply.querySelectorAll('[data-next]').forEach(function(b){
+    b.addEventListener('click', function(){ if(stepValid()) goStep(cur + 1); });
+  });
+  var applyForm = apply.querySelector('form');
+
+  // ── 신청·질문지 전송 ──
+  // Apps Script 웹앱 주소(.../exec). 비어 있으면 화면만 넘어가고 저장은 안 된다.
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbx7DujSdwYC1rCtyGnjVc-MOYkhK-dLpKU_E1fbKzbgOdqOdf8b7cVHzzoI_GAgAXI/exec';  // 플로 채널 전용 시트(플로 채널 랜딩 신청)
+
+  // 접수번호. 신청과 질문지를 같은 건으로 묶는 열쇠다.
+  var rid = (function(){
+    var d = new Date(), p = function(n){ return ('0' + n).slice(-2); };
+    return 'R' + String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate())
+      + '-' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds())
+      + '-' + Math.random().toString(36).slice(2, 5).toUpperCase();
+  })();
+  // 안내 메일 링크(?rid=...)로 들어오면 그 번호를 쓰고 질문지부터 연다.
+  var ridIn = (location.search.match(/[?&]rid=([^&]+)/) || [])[1];
+  if(ridIn){ rid = decodeURIComponent(ridIn); }
+
+  var APPLY_FIELDS = ['src','from','stage','name','biz_name','tel','email','url','blog','insta','place',
+                      'goal','goal_etc','biz','area','etc','memo','agree'];
+  var QUIZ_FIELDS = ['q1','q2','q3','q4','q5','q6'];
+
+  function collect(names, type){
+    var fd = new FormData(applyForm), out = { rid: rid, type: type };
+    names.forEach(function(n){ out[n] = fd.get(n) || ''; });
+    return out;
+  }
+
+  function post(payload, btn, ok){
+    var label = btn.textContent;
+    if(!ENDPOINT){ ok(); return; }
+    btn.disabled = true;
+    btn.textContent = '보내는 중…';
+    fetch(ENDPOINT, { method: 'POST', body: JSON.stringify(payload) })
+      .then(function(r){ return r.json(); })
+      .then(function(r){
+        if(!r.ok){ throw new Error(r.error || 'fail'); }
+        btn.disabled = false; btn.textContent = label;
+        ok();
+      })
+      .catch(function(){
+        btn.disabled = false; btn.textContent = label;
+        alert('전송에 실패했습니다. 잠시 후 다시 눌러주세요.');
+      });
+  }
+
+  if(applyForm){
+    applyForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      if(!stepValid()) return;
+      var btn = applyForm.querySelector('button[type="submit"]');
+      post(collect(APPLY_FIELDS, 'apply'), btn, function(){
+        // 저장이 실제로 끝난 뒤에만 쏜다. 화면만 넘어간 건 신청이 아니다.
+        if(window.fbq){ fbq('track', 'Lead'); }
+        goStep(cur + 1);
+      });
+    });
+  }
+
+  var qsend = apply.querySelector('[data-qsend]');
+  if(qsend){
+    qsend.addEventListener('click', function(){
+      post(collect(QUIZ_FIELDS, 'quiz'), qsend, function(){
+        qsend.textContent = '보내주셔서 감사합니다';
+        qsend.disabled = true;
+      });
+    });
+  }
+
+  // 안내 메일의 질문지 링크로 들어온 경우 바로 질문지를 연다.
+  if(ridIn){ openApply(); goStep(steps.length - 1); }
+
+  apply.querySelectorAll('[data-prev]').forEach(function(b){
+    b.addEventListener('click', function(){ goStep(cur - 1); });
+  });
+  function closeApply(){
+    if(!apply.classList.contains('on')) return;
+    // 닫는 동작이 끝난 뒤에 감춘다. 바로 없애면 열 때만 부드럽고 닫을 때 툭 끊긴다.
+    apply.classList.add('out');
+    setTimeout(function(){ apply.classList.remove('on','out'); }, 200);
+    document.body.classList.remove('noscroll');
+    // 폴백으로 열렸을 때 남은 #apply를 지운다. 안 지우면 :target이 계속 띄운다.
+    if(location.hash === '#apply'){
+      try{ history.replaceState(null, '', location.pathname + location.search); }catch(err){}
+    }
+  }
+  document.querySelectorAll('a[href="#apply"]').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); openApply(); track('ApplyOpen'); });
+  });
+  apply.addEventListener('click', function(e){
+    if(e.target === apply || e.target.classList.contains('modal-x')){ closeApply(); }
+  });
+
+  // 소개 영상 — 포스터를 누르면 그때 파일을 받아 재생한다(preload="none").
+  var vf = document.querySelector('.vframe');
+  if(vf){
+    var vv = vf.querySelector('video');
+    vf.querySelector('.vplay').addEventListener('click', function(){
+      vf.classList.add('playing');
+      vv.controls = true;
+      vv.play();
+    });
+  }
+
+  // 두 갈래 카드의 선 그리기.
+  // 등장 감지(15%)에 얹으면 화면 아래 끝에 걸친 순간 혼자 다 그려지고 끝난다.
+  // 카드가 절반 이상 들어왔을 때 시작하도록 따로 본다. 숫자 카운터와 같은 기준이다.
+  var vsEl = document.querySelector('.vs');
+  if(vsEl){
+    try{
+      var vo = new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          if(!e.isIntersecting) return;
+          vo.unobserve(e.target);
+          e.target.classList.add('go');
+          // 그리기가 끝날 즈음 완성 상태로 못 박는다. 시간이 멈춘 뷰어 대비.
+          setTimeout(function(){ e.target.classList.add('drawn'); }, 3000);
+        });
+      }, { threshold: 0, rootMargin: '-30% 0px -45% 0px' });   // 화면 가운데 띠에 걸릴 때
+      vo.observe(vsEl);
+    }catch(err){ vsEl.classList.add('go','drawn'); }
+  }
+
+  // 오퍼 세 항목의 번호 점등. 항목이 화면 가운데 근처로 올라오면 라임으로 바뀐다.
+  try{
+    var ho = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return;
+        ho.unobserve(e.target);
+        e.target.classList.add('hot');
+      });
+    }, { threshold: .6, rootMargin: '0px 0px -22% 0px' });
+    document.querySelectorAll('.card').forEach(function(c){ ho.observe(c); });
+  }catch(err){ document.querySelectorAll('.card').forEach(function(c){ c.classList.add('hot'); }); }
+
+  // 금액 → 무료 전환. 블록이 화면에 충분히 들어왔을 때 한 번만 돈다.
+  var totalEl = document.querySelector('.total');
+  if(totalEl){
+    try{
+      var to = new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          if(!e.isIntersecting) return;
+          to.unobserve(e.target);
+          e.target.classList.add('hit');
+        });
+      }, { threshold: .55 });
+      to.observe(totalEl);
+    }catch(err){ totalEl.classList.add('hit'); }
+  }
+
+  // 진입 감지 자체가 죽은 환경(문서 미리보기 창 등)에서는 전환이 시작점에 굳는다.
+  // 그럴 때만 전환을 끊고 결과 상태로 넘긴다. 스크롤로 보는 사람에겐 영향이 없다.
+  setTimeout(function(){
+    if(ioLive) return;
+    document.documentElement.classList.add('nofx');
+    if(vsEl){ vsEl.classList.add('go','drawn'); }
+    document.querySelectorAll('[data-count]').forEach(function(el){
+      var v = parseInt(el.getAttribute('data-count'), 10);
+      if(!isNaN(v)){ el.textContent = v.toLocaleString('ko-KR'); el.dataset.done = '1'; }
+    });
+    if(totalEl){ totalEl.classList.add('hit'); }
+  }, 2500);
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ lb.classList.remove('on'); closeApply(); }
+  });
+</script>
+</body>
+</html>
