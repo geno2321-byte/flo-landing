@@ -388,6 +388,7 @@ img{display:block;max-width:100%}
 .offer h2{font-size:clamp(1.75rem,5.6vw,2.75rem);letter-spacing:-.028em}
 .offer .bridge{margin-top:18px;font-size:clamp(.9375rem,3.6vw,1.0625rem);color:var(--mute);line-height:1.78}
 /* ── 오퍼 머리 (받는 것을 먼저 말하고 바로 버튼) ── */
+.offer{overflow-x:clip}
 .opening{position:relative;text-align:center;padding-bottom:8px}
 .opening::before{content:"";position:absolute;left:50%;top:-180px;
   width:min(760px,150%);height:440px;transform:translateX(-50%);
@@ -647,6 +648,21 @@ fieldset.field{border:0;padding:0;margin:0}
   .js [data-reveal]{opacity:1 !important;transform:none !important}
 }
 </style>
+<!-- Meta Pixel — 병원 랜딩과 같은 픽셀(3961493720822898). 병원 광고 최적화와 섞이지 않게 표준 이벤트(PageView·Lead)는 쓰지 않고 Flo* 맞춤 이벤트만 쏜다. -->
+<script>
+if(location.hostname === 'flo.flowads.co.kr'){
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','3961493720822898');
+fbq('trackCustom','FloView');
+}
+</script>
 </head>
 <body>
 <script>document.documentElement.classList.add('js')</script>
@@ -1053,13 +1069,13 @@ fieldset.field{border:0;padding:0;margin:0}
   </div>
 </footer>
 
-<!-- ══ 신청 폼 — 3단계 모달 ══ -->
+<!-- ══ 신청 폼 — 2단계 모달 ══ -->
 <div class="modal" id="apply" role="dialog" aria-modal="true" aria-label="진단 리포트 신청">
   <div class="modal-panel">
     <button class="modal-x" type="button" aria-label="닫기">×</button>
     <div class="apply">
-      <div class="pbar" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
-      <p class="pnum"><span data-cur>1</span> / 3</p>
+      <div class="pbar" aria-hidden="true"><i class="on"></i><i></i></div>
+      <p class="pnum"><span data-cur>1</span> / 2</p>
 
       <!-- 신청·질문지는 스크립트에서 Apps Script 웹앱으로 보낸다.
            보낼 주소는 아래 스크립트의 ENDPOINT 한 곳에서 관리한다. -->
@@ -1074,7 +1090,7 @@ fieldset.field{border:0;padding:0;margin:0}
 
           <input type="hidden" name="src" value="flo_channel">
           <fieldset class="field">
-            <legend>플로우애즈를 어떻게 알게 되셨나요 <i>*</i></legend>
+            <legend>저희를 어떻게 알게 되셨나요 <i>*</i></legend>
             <div class="opts">
               <label class="opt"><input type="radio" name="from" value="유튜브" required><span>유튜브</span></label>
               <label class="opt"><input type="radio" name="from" value="인스타그램"><span>인스타그램</span></label>
@@ -1098,7 +1114,7 @@ fieldset.field{border:0;padding:0;margin:0}
           </div>
         </div>
 
-        <!-- ── 2단계. 연락처 ── -->
+        <!-- ── 2단계. 기본 정보 + 리포트 재료 ── -->
         <div class="step" data-step="2">
           <div class="shead"><h2>기본 정보</h2></div>
 
@@ -1109,8 +1125,18 @@ fieldset.field{border:0;padding:0;margin:0}
 
           <div class="field">
             <label for="f-biz-name">상호 (사업장명) <i>*</i></label>
-            <input id="f-biz-name" name="biz_name" type="text" placeholder="예) 평촌 밝은미소 교정치과" required>
+            <input id="f-biz-name" name="biz_name" type="text" placeholder="검색 가능한 상호 예) 강남 ㅇㅇ피부과" required>
             <small>이 이름으로 찾아보고 리포트를 씁니다.</small>
+          </div>
+
+          <div class="field">
+            <label for="f-biz">업종 <i>*</i></label>
+            <input id="f-biz" name="biz" type="text" required>
+          </div>
+
+          <div class="field">
+            <label for="f-area">지역 <i>*</i></label>
+            <input id="f-area" name="area" type="text" placeholder="시 단위까지 적어주세요" required>
           </div>
 
           <div class="field">
@@ -1121,12 +1147,11 @@ fieldset.field{border:0;padding:0;margin:0}
           <div class="field">
             <label for="f-mail">이메일 <i>*</i></label>
             <input id="f-mail" name="email" type="email" inputmode="email" placeholder="example@email.com" required>
-            <small>리포트는 이 주소로만 보내드립니다.</small>
+            <small>리포트를 받을 주소를 입력해주세요.</small>
           </div>
 
           <div class="field">
-            <label for="f-url">운영 중인 채널 (선택)</label>
-            <small>있는 것만 넣어주시고, 없으면 비워두셔도 됩니다.</small>
+            <label for="f-url">운영 중인 마케팅 채널 (선택)</label>
             <input id="f-url" name="url" type="url" placeholder="유튜브 주소">
           </div>
 
@@ -1142,16 +1167,6 @@ fieldset.field{border:0;padding:0;margin:0}
             <input id="f-place" name="place" type="url" placeholder="네이버 플레이스 주소">
           </div>
 
-          <div class="nav">
-            <button class="btn-back" type="button" data-prev>이전</button>
-            <button class="cta" type="button" data-next>다음</button>
-          </div>
-        </div>
-
-        <!-- ── 3단계. 리포트 재료 ── -->
-        <div class="step" data-step="3">
-          <div class="shead"><h2>상세 정보</h2></div>
-
           <fieldset class="field">
             <legend>유튜브 채널 운영 목적 <i>*</i></legend>
             <div class="opts stack">
@@ -1164,22 +1179,7 @@ fieldset.field{border:0;padding:0;margin:0}
           </fieldset>
 
           <div class="field">
-            <label for="f-biz">업종 <i>*</i></label>
-            <input id="f-biz" name="biz" type="text" placeholder="예) 한의원" required>
-          </div>
-
-          <div class="field">
-            <label for="f-area">지역 <i>*</i></label>
-            <input id="f-area" name="area" type="text" placeholder="예) 경기도 하남시 (시 단위까지 적어주세요)" required>
-          </div>
-
-          <div class="field">
-            <label for="f-etc">지금 하고 계신 다른 마케팅</label>
-            <input id="f-etc" name="etc" type="text" placeholder="예) 블로그, 인스타그램, 네이버 광고">
-          </div>
-
-          <div class="field">
-            <label for="f-memo">지금 가장 답답한 점 <i>*</i></label>
+            <label for="f-memo">지금 가장 고민되는 것을 알려주세요. <i>*</i></label>
             <textarea id="f-memo" name="memo" placeholder="영상은 올리는데 문의가 없습니다" required></textarea>
           </div>
 
@@ -1198,7 +1198,7 @@ fieldset.field{border:0;padding:0;margin:0}
         </div>
 
         <!-- 4단계: 신청 완료 + 니치 질문지. 리포트의 차별화 포인트를 여기서 받는다. -->
-        <div class="step" data-step="4">
+        <div class="step" data-step="3">
 
           <div class="dhead">
             <p class="deb">신청 완료</p>
@@ -1419,8 +1419,8 @@ fieldset.field{border:0;padding:0;margin:0}
     for(var n = 0; n < steps.length; n++){ steps[n].classList.toggle('on', n === i); }
     for(var b = 0; b < bars.length; b++){ bars[b].classList.toggle('on', b <= i); }
     curNum.textContent = i + 1;
-    if(i > 0 && i < steps.length - 1){ track('ApplyStep' + (i + 1)); }
-    // 마지막(신청 완료 + 질문지)은 단계 표시를 감춘다. 3칸짜리 표시에 4가 뜨면 이상하다.
+    if(i > 0 && i < steps.length - 1){ track('FloApplyStep' + (i + 1)); }
+    // 마지막(신청 완료 + 질문지)은 단계 표시를 감춘다. 2칸짜리 표시에 3이 뜨면 이상하다.
     var last = (i === steps.length - 1);
     if(pbarEl){ pbarEl.hidden = last; }
     if(pnumEl){ pnumEl.hidden = last; }
@@ -1464,6 +1464,16 @@ fieldset.field{border:0;padding:0;margin:0}
   var ridIn = (location.search.match(/[?&]rid=([^&]+)/) || [])[1];
   if(ridIn){ rid = decodeURIComponent(ridIn); }
 
+  // 유입 경로. 주소의 ?src=(yt·pdf·done·mail 등)와 칼럼을 거쳤다면 &via=를 시트 src 칸에 남긴다. 없으면 flo_channel.
+  (function(){
+    var s = (location.search.match(/[?&]src=([^&#]+)/) || [])[1];
+    var v = (location.search.match(/[?&]via=([^&#]+)/) || [])[1];
+    if(!s){ return; }
+    var val = decodeURIComponent(s).slice(0, 30) + (v ? '>' + decodeURIComponent(v).slice(0, 30) : '');
+    var h = apply.querySelector('input[name="src"]');
+    if(h){ h.value = val; }
+  })();
+
   var APPLY_FIELDS = ['src','from','stage','name','biz_name','tel','email','url','blog','insta','place',
                       'goal','goal_etc','biz','area','etc','memo','agree'];
   var QUIZ_FIELDS = ['q1','q2','q3','q4','q5','q6'];
@@ -1499,7 +1509,7 @@ fieldset.field{border:0;padding:0;margin:0}
       var btn = applyForm.querySelector('button[type="submit"]');
       post(collect(APPLY_FIELDS, 'apply'), btn, function(){
         // 저장이 실제로 끝난 뒤에만 쏜다. 화면만 넘어간 건 신청이 아니다.
-        if(window.fbq){ fbq('track', 'Lead'); }
+        if(window.fbq){ fbq('trackCustom', 'FloLead'); }
         goStep(cur + 1);
       });
     });
