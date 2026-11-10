@@ -663,6 +663,9 @@ fbq('init','3961493720822898');
 fbq('trackCustom','FloView');
 }
 </script>
+<!-- GA4 (플로우애즈 사이트, 261110) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K03NX5Q0MW"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K03NX5Q0MW');</script>
 </head>
 <body>
 <script>document.documentElement.classList.add('js')</script>
@@ -1509,7 +1512,7 @@ fbq('trackCustom','FloView');
       var btn = applyForm.querySelector('button[type="submit"]');
       post(collect(APPLY_FIELDS, 'apply'), btn, function(){
         // 저장이 실제로 끝난 뒤에만 쏜다. 화면만 넘어간 건 신청이 아니다.
-        if(window.fbq){ fbq('trackCustom', 'FloLead'); }
+        if(window.fbq){ fbq('trackCustom', 'FloLead'); } if(window.gtag){ gtag('event', 'generate_lead', {lead_source: 'flo_survey'}); }
         goStep(cur + 1);
       });
     });
